@@ -1,0 +1,18 @@
+def calc_pst(long_prd,short_prd,close_df,code_list=None):
+    if code_list is None:
+        code_list =close_df.columns.values
+    pst_=pd.DataFrame(data=0,index=close_df.index,columns=code_list)
+    for code_ in code_list:
+        bf_max_p =close_df[code_].shift(short_prd).rolling(long_prd).max()
+        bf_min_p=close_df[code_].shift(short_prd).rolling(long_prd).min()
+        wave_shape=(close_df[code_]>bf_min_p)&(close_df[code_]<bf_max_p)
+        up_shape=(close_df[code_]>bf_max_p)
+        down_shape=(close_df[code_]<bf_min_p)
+        
+        wave_idx=close_df[wave_shape].index
+        up_idx=close_df[up_shape].index
+        down_idx=close_df[down_shape].index
+        pst_.loc[up_idx,code_]=1
+        pst_.loc[down_idx,code_]=-1
+        
+    return pst_
