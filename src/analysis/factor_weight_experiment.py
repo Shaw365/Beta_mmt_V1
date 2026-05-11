@@ -16,7 +16,7 @@ if PROJECT_ROOT not in sys.path:
 
 OUTPUT_DIR = os.path.join(PROJECT_ROOT, "output", "cne6")
 DATA_DIR = os.path.join(OUTPUT_DIR, "data")
-IMAGE_DIR = os.path.join(OUTPUT_DIR, "images")
+IMAGE_DIR = os.path.join(OUTPUT_DIR, "images", "optimize")
 
 SUFFIX = "l20_s5_b2_e1_n100"
 
@@ -283,7 +283,7 @@ def _calculate_metrics(returns, dates, risk_free_rate=0.03):
     }
 
 
-def summarize_factor_weight_experiment(returns_df, net_cost_bps=20, risk_free_rate=0.03):
+def summarize_factor_weight_experiment(returns_df, net_cost_bps=10, risk_free_rate=0.03):
     """汇总各因子权重场景的毛收益和成本后收益。"""
     summary_rows = []
     annual_rows = []
@@ -355,7 +355,7 @@ def summarize_factor_weight_experiment(returns_df, net_cost_bps=20, risk_free_ra
     return summary_df, annual_df
 
 
-def run_factor_weight_experiment(scenarios, top_n=100, net_cost_bps=20):
+def run_factor_weight_experiment(scenarios, top_n=100, net_cost_bps=10):
     """运行全部因子剔除/降权场景。"""
     portfolio_df = load_portfolio_returns()
     optimal_df, factor_cols = load_optimal_vectors()
@@ -449,13 +449,13 @@ def plot_factor_weight_experiment(returns_df, summary_df, scenarios_to_plot=None
         "场景",
         "有效因子",
         "毛年化",
-        "20bp净年化",
+        "10bp净年化",
         "最大回撤",
         "平均换手",
         "与原持仓重合",
         "净年化差",
     ]
-    for col in ["毛年化", "20bp净年化", "最大回撤", "平均换手", "与原持仓重合", "净年化差"]:
+    for col in ["毛年化", "10bp净年化", "最大回撤", "平均换手", "与原持仓重合", "净年化差"]:
         table_df[col] = table_df[col].map(_format_percent)
 
     ax_table.axis("off")
@@ -485,10 +485,10 @@ def plot_factor_weight_experiment(returns_df, summary_df, scenarios_to_plot=None
         if col == col_index["场景"]:
             cell.set_facecolor("#F5F5F5")
             cell.set_text_props(weight="bold")
-        elif col in [col_index["毛年化"], col_index["20bp净年化"], col_index["净年化差"]]:
+        elif col in [col_index["毛年化"], col_index["10bp净年化"], col_index["净年化差"]]:
             metric_name = {
                 col_index["毛年化"]: "annual_return",
-                col_index["20bp净年化"]: "net_annual_return",
+                col_index["10bp净年化"]: "net_annual_return",
                 col_index["净年化差"]: "net_annual_return_diff_vs_baseline",
             }[col]
             value = raw_row[metric_name]

@@ -589,7 +589,8 @@ class BarraCNE5:
         
         # 保存结果
         print("\n保存结果...")
-        output_dir = 'e:/code/python/ai_project/beta_mmt/output/cne5/data'
+        project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        output_dir = os.path.join(project_root, 'output', 'cne5', 'data')
         os.makedirs(output_dir, exist_ok=True)
         
         factor_returns_df.to_csv(f'{output_dir}/factor_returns_cne5.csv', index=False)
@@ -690,7 +691,8 @@ class BarraCNE5:
         # 手动调整布局，避免tight_layout()的bug
         plt.subplots_adjust(left=0.08, right=0.95, top=0.92, bottom=0.15)
         
-        output_dir = 'e:/code/python/ai_project/beta_mmt/output/cne5/images'
+        project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        output_dir = os.path.join(project_root, 'output', 'cne5', 'images', 'backtest')
         os.makedirs(output_dir, exist_ok=True)
         plt.savefig(f'{output_dir}/cumulative_returns_cne5.png', dpi=300)
         plt.close()

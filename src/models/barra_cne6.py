@@ -811,12 +811,13 @@ class BarraCNE6:
         # 手动调整布局，避免tight_layout()的bug
         plt.subplots_adjust(left=0.08, right=0.95, top=0.92, bottom=0.15)
         
-        output_dir = 'E:/code/beta_mmt_v1/output/cne6'
-        os.makedirs(f'{output_dir}/images', exist_ok=True)
-        plt.savefig(f'{output_dir}/images/cumulative_returns_cne6.png', dpi=300)
+        project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        output_dir = os.path.join(project_root, 'output', 'cne6')
+        os.makedirs(f'{output_dir}/images/backtest', exist_ok=True)
+        plt.savefig(f'{output_dir}/images/backtest/cumulative_returns_cne6.png', dpi=300)
         plt.close()
         
-        print(f"累计收益率图已保存到: {output_dir}/images/cumulative_returns_cne6.png")
+        print(f"累计收益率图已保存到: {output_dir}/images/backtest/cumulative_returns_cne6.png")
     
     def generate_factor_summary_excel(self, factor_returns_df, output_dir):
         """生成因子总结Excel报告"""
@@ -1088,7 +1089,8 @@ class BarraCNE6:
         
         # 保存结果
         print("\n保存结果...")
-        output_dir = 'E:/code/beta_mmt_v1/output/cne6'
+        project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        output_dir = os.path.join(project_root, 'output', 'cne6')
         factor_returns_df.to_csv(f'{output_dir}/data/factor_returns_cne6.csv', index=False)
         cumulative_returns.to_csv(f'{output_dir}/data/cumulative_returns_cne6.csv', index=False)
         

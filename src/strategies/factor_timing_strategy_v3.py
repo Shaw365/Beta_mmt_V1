@@ -35,8 +35,9 @@ plt.rcParams['font.family'] = 'sans-serif'
 class FactorTimingStrategy:
     """风格因子择时策略"""
     
-    def __init__(self, long_prd=20, short_prd=5, channel_bins=3, extreme_value=1, top_n=100, 
-                 initial_capital=100000000, stock_capital=1000000):
+    def __init__(self, long_prd=20, short_prd=5, channel_bins=3, extreme_value=1, top_n=100,
+                 initial_capital=100000000, stock_capital=1000000,
+                 turnover_control=False, max_turnover=None, turnover_buffer_multiplier=2.0):
         """
         参数:
             long_prd: 长周期（用于计算通道）
@@ -46,6 +47,9 @@ class FactorTimingStrategy:
             top_n: 选股数量
             initial_capital: 初始资金（默认1亿）
             stock_capital: 单只股票市值（默认100万）
+            turnover_control: 是否启用换手控制
+            max_turnover: 单期最大单边换手率，如0.3表示最多卖出上一期30%的持仓
+            turnover_buffer_multiplier: 换手缓冲候选池倍数，如2.0表示在Top 200里保留旧持仓
         """
         self.long_prd = long_prd
         self.short_prd = short_prd
@@ -54,6 +58,9 @@ class FactorTimingStrategy:
         self.top_n = top_n
         self.initial_capital = initial_capital
         self.stock_capital = stock_capital
+        self.turnover_control = turnover_control
+        self.max_turnover = max_turnover
+        self.turnover_buffer_multiplier = max(1.0, float(turnover_buffer_multiplier))
         
         # 初始化交易记录器
         self.trade_recorder = TradeRecorder(initial_capital, stock_capital)
@@ -232,8 +239,8 @@ class FactorTimingStrategy:
         
         return weekly_returns_df
     
-    def select_stocks(self, factor_exposure_df, optimal_vector, signal_date, trade_date, 
-                      suspended_codes=None):
+    def select_stocks(self, factor_exposure_df, optimal_vector, signal_date, trade_date,
+                      suspended_codes=None, candidate_pool_size=None):
         """
         选择股票（使用信号日的因子暴露，交易日前一天的数据）
         
@@ -243,6 +250,7 @@ class FactorTimingStrategy:
             signal_date: 信号生成日期（使用该日期的因子暴露）
             trade_date: 交易日期（用于日志）
             suspended_codes: 停牌股票代码集合（不参与选股）
+            candidate_pool_size: 候选池大小。为空时直接返回top_n；启用换手控制时可扩大候选池
             
         返回:
             选中的股票代码列表
@@ -289,12 +297,68 @@ class FactorTimingStrategy:
         
         similarity_df = similarity_df.sort_values('similarity', ascending=False)
         
-        # 选择相似度最高的top_n只股票
-        selected_codes = similarity_df.head(self.top_n)['code'].tolist()
+        # 选择相似度最高的股票。换手控制会先拿更宽的候选池，再从中保留旧持仓。
+        pool_size = candidate_pool_size if candidate_pool_size is not None else self.top_n
+        selected_codes = similarity_df.head(pool_size)['code'].tolist()
         
-        if len(selected_codes) < self.top_n:
+        if len(selected_codes) < min(pool_size, self.top_n):
             print(f"警告: {signal_date} 只选出了 {len(selected_codes)} 只股票（目标 {self.top_n}）")
         
+        return selected_codes
+
+    def get_turnover_candidate_pool_size(self):
+        """根据换手缓冲倍数计算候选池大小。"""
+        if not self.turnover_control:
+            return self.top_n
+        return max(self.top_n, int(np.ceil(self.top_n * self.turnover_buffer_multiplier)))
+
+    def apply_turnover_control(self, prev_stocks, candidate_codes, target_n=None, blocked_codes=None):
+        """
+        在候选池中优先保留旧持仓，以降低单期换手。
+
+        逻辑：
+        1. 不启用换手控制时，直接取候选池前target_n只股票；
+        2. 启用后，旧持仓如果仍落在缓冲候选池内，则优先保留；
+        3. 如果设置了max_turnover，则至少保留对应数量的旧持仓；
+        4. 最后按候选池排名补足到target_n。
+        """
+        target_n = target_n if target_n is not None else self.top_n
+        blocked_codes = set(blocked_codes or [])
+        candidate_codes = list(dict.fromkeys(candidate_codes))
+
+        if (not self.turnover_control) or len(prev_stocks) == 0:
+            return candidate_codes[:target_n]
+
+        prev_set = set(prev_stocks)
+        rank = {code: idx for idx, code in enumerate(candidate_codes)}
+
+        # 已经在Top N里的旧持仓自然保留；缓冲池内的旧持仓作为降换手的备选保留对象。
+        base_keep = [code for code in candidate_codes[:target_n] if code in prev_set]
+        buffer_keep = [code for code in candidate_codes if code in prev_set and code not in base_keep]
+        keep_codes = base_keep.copy()
+
+        if self.max_turnover is not None:
+            max_turnover = min(max(float(self.max_turnover), 0.0), 1.0)
+            max_sells = int(np.floor(len(prev_stocks) * max_turnover))
+            min_keep = max(0, min(len(prev_stocks), target_n) - max_sells)
+            for code in buffer_keep:
+                if len(keep_codes) >= min_keep:
+                    break
+                keep_codes.append(code)
+            # 如果缓冲候选池里的旧持仓不足以满足换手上限，则继续保留未停牌的旧持仓。
+            # 这一步会牺牲部分当期相似度排名，但能让max_turnover成为真正的交易约束。
+            for code in prev_stocks:
+                if len(keep_codes) >= min_keep:
+                    break
+                if code not in keep_codes and code not in blocked_codes:
+                    keep_codes.append(code)
+        else:
+            keep_codes.extend(buffer_keep)
+
+        keep_codes = sorted(dict.fromkeys(keep_codes), key=lambda code: rank.get(code, len(rank)))
+        fill_codes = [code for code in candidate_codes if code not in set(keep_codes)]
+        selected_codes = (keep_codes + fill_codes)[:target_n]
+
         return selected_codes
     
     def calculate_turnover(self, prev_stocks, current_stocks):
@@ -404,8 +468,11 @@ class FactorTimingStrategy:
             suspended_codes = suspend_lookup.get(current_date, set())
             
             # 第一步：Barra择时选股（使用信号日期的因子暴露，排除停牌股票）
+            # 启用换手控制时，先取更宽的候选池，随后在候选池内优先保留旧持仓。
+            candidate_pool_size = self.get_turnover_candidate_pool_size()
             selected_codes = self.select_stocks(factor_exposure_df, optimal_vector, signal_date, current_date, 
-                                                suspended_codes=suspended_codes)
+                                                suspended_codes=suspended_codes,
+                                                candidate_pool_size=candidate_pool_size)
             
             if len(selected_codes) == 0:
                 continue
@@ -425,6 +492,14 @@ class FactorTimingStrategy:
                     # 如果是第一期且无Active数据，跳过本次换仓
                     else:
                         continue
+
+            target_n = active_top_n if active_screener is not None else self.top_n
+            selected_codes = self.apply_turnover_control(
+                prev_stocks,
+                selected_codes,
+                target_n=target_n,
+                blocked_codes=suspended_codes,
+            )
             
             # 从预计算的周度收益率中获取组合收益率
             if current_date in weekly_returns_df.index:
@@ -482,7 +557,16 @@ class FactorTimingStrategy:
     
     def get_param_suffix(self):
         """生成参数后缀，用于区分不同参数组合的输出文件"""
-        return f'l{self.long_prd}_s{self.short_prd}_b{self.channel_bins}_e{self.extreme_value}_n{self.top_n}'
+        suffix = f'l{self.long_prd}_s{self.short_prd}_b{self.channel_bins}_e{self.extreme_value}_n{self.top_n}'
+        if self.turnover_control:
+            if self.max_turnover is not None:
+                turnover_pct = int(round(float(self.max_turnover) * 100))
+                suffix += f'_tc{turnover_pct}'
+            else:
+                suffix += '_tcbuf'
+            buffer_label = f'{self.turnover_buffer_multiplier:g}'.replace('.', 'p')
+            suffix += f'_buf{buffer_label}'
+        return suffix
     
     def generate_trade_report(self, output_dir, file_suffix=None):
         """
@@ -682,7 +766,9 @@ class FactorTimingStrategy:
         ax_to.grid(True, alpha=0.3)
         
         # 保存图表
-        fig_path = f'{output_dir}/factor_timing_{suffix}.png'
+        fig_dir = os.path.join(output_dir, 'images', 'backtest')
+        os.makedirs(fig_dir, exist_ok=True)
+        fig_path = os.path.join(fig_dir, f'factor_timing_{suffix}.png')
         plt.savefig(fig_path, dpi=300, bbox_inches='tight')
         plt.close()
         

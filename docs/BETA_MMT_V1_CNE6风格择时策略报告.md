@@ -1,6 +1,6 @@
 # BETA_MMT_V1 CNE6 风格择时策略报告
 
-报告日期：2026-04-30  
+报告日期：2026-05-11  
 研究对象：`BETA_MMT_V1` 项目中的 Barra CNE6 风格因子择时选股策略  
 回测区间：2020-02-17 至 2025-12-22  
 当前参数：`long_prd=20, short_prd=5, channel_bins=2, extreme_value=1, top_n=100`  
@@ -16,15 +16,16 @@
 
 > 以 CNE6 风格择时为核心选股约束，同时显著受益于小市值、高弹性股票共同行情的周度换仓策略。
 
-交易成本是策略落地的关键约束。平均单边换手约 `76.9%`，在单边 `20bp` 成本假设下，年化收益从 `42.7%` 降至 `31.9%`，仍有吸引力；在 `50bp` 下年化收益降至 `17.1%`，夏普降至 `0.49`；在 `100bp` 下策略转为负年化。也就是说，策略对中低成本环境仍有韧性，但对高交易成本非常敏感。
+交易成本是策略落地的关键约束。旧单边换手口径下，`10bp` 成本后年化收益从 `42.7%` 降至 `37.2%`；但该口径偏乐观。新增实盘友好口径后，即 `10bp` 双边固定成本 + 首期建仓成本 + 基于成交金额/20日 ADV 的平方根冲击成本，在 `1亿` 资金规模下年化收益约为 `28.5%`，最大回撤约为 `-21.2%`；在 `5亿` 资金规模下年化收益约为 `24.4%`，最大回撤约为 `-22.7%`。因此，本报告以双边和冲击成本口径作为主决策口径，旧单边口径只保留为历史对照。
 
 因子层面，`LIQUIDITY`、`SIZE`、`BETA`、`RESVOL` 是主要收益来源；其中 `LIQUIDITY` 是最稳定的方向型收益来源，`SIZE` 兼具信号有效性和持仓内部兑现质量。`TOPSI`、`STOQ`、`HISTVOL` 在归因上偏弱或为负，但简单剔除/降权并没有改善策略表现，说明因子间存在显著交互，不能只按单因子样本内贡献做机械删减。
 
-本报告建议下一阶段优先做三件事：
+本报告同步策略优化实验后的最终定稿结论：
 
-1. 引入换手缓冲或交易成本约束，降低实盘摩擦。
-2. 做滚动可靠性加权，而不是全样本事后因子剔除。
-3. 补充行业分类缓存，进一步拆解 residual 中的行业和主题暴露。
+1. 保留换手控制作为交易执行层的核心优化工具；成交约束与 walk-forward 验证均支持 `max_turnover=50%` 附近的平台参数，当前生产默认候选维持 `tc50_buf2`，`tc50_buf3/4` 作为同平台备选。
+2. 主策略核心参数维持 `L20/S5/B2/N100`。稳定性验证显示它不是单点最优，但处在前排平台；`S3/N120` 一带只作为二期观察候选，不因全样本排名直接替换正式参数。
+3. 不继续引入复杂综合目标函数。该类目标函数会引入新的主观权重，容易形成二次调参；本版报告停止在成本、容量和样本外稳定性验证之后，给出克制的研究版定稿建议。
+4. 不将因子剔除/静态降权、滚动可靠性加权、成交约束下动态选参纳入正式方案。它们作为诊断证据保留结论，不再占用正文主线。
 
 ## 2. 项目架构概览
 
@@ -34,22 +35,24 @@
 |---|---|---|
 | Barra 模型层 | `src/models/barra_cne6.py` | 生成 CNE6 风格因子暴露、因子收益和累计因子收益 |
 | 策略回测层 | `src/strategies/factor_timing_strategy_v3.py` | 生成择时信号、最优风格向量、余弦相似度选股、周度回测 |
-| 分析诊断层 | `src/analysis/` | 收益归因、交易成本压力测试、因子剔除/降权实验、residual 归因 |
+| 分析诊断层 | `src/analysis/`、`src/optimize/` | 收益归因、交易成本、成交约束、换手控制、参数稳定性和 residual 归因 |
 | 脚本入口层 | `scripts/` | 组织不同分析任务的可复现入口 |
 
 当前主要入口如下：
 
 | 脚本 | 作用 |
 |---|---|
-| `scripts/run_factor_timing_v3.py` | 运行 CNE6 风格择时主策略 |
-| `scripts/run_style_factor_attribution_cne6.py` | 生成完整风格归因、分时段归因、择时有效性、持仓暴露质量 |
-| `scripts/run_style_factor_attribution_summary_cne6.py` | 只生成全样本风格收益归因 |
-| `scripts/run_style_factor_attribution_regime_cne6.py` | 只生成分时段风格收益归因 |
-| `scripts/run_style_timing_effectiveness_cne6.py` | 生成风格择时有效性表 |
-| `scripts/run_style_holding_exposure_quality_cne6.py` | 生成持仓内部风格暴露质量表 |
-| `scripts/run_transaction_cost_stress_cne6.py` | 生成交易成本压力测试 |
-| `scripts/run_factor_weight_experiment_cne6.py` | 生成因子剔除/降权实验 |
-| `scripts/run_residual_attribution_cne6.py` | 生成 residual 归因 |
+| `scripts/backtest/run_factor_timing_v3.py` | 运行 CNE6 风格择时主策略 |
+| `scripts/analysis/run_style_factor_attribution_cne6.py` | 生成完整风格归因、分时段归因、择时有效性、持仓暴露质量 |
+| `scripts/analysis/run_style_factor_attribution_summary_cne6.py` | 只生成全样本风格收益归因 |
+| `scripts/analysis/run_style_factor_attribution_regime_cne6.py` | 只生成分时段风格收益归因 |
+| `scripts/analysis/run_style_timing_effectiveness_cne6.py` | 生成风格择时有效性表 |
+| `scripts/analysis/run_style_holding_exposure_quality_cne6.py` | 生成持仓内部风格暴露质量表 |
+| `scripts/analysis/run_transaction_cost_stress_cne6.py` | 生成交易成本压力测试 |
+| `scripts/optimize/run_turnover_control_experiment_cne6.py` | 生成换手控制参数网格实验 |
+| `scripts/optimize/run_execution_capacity_experiment_cne6.py` | 生成成交可实现性与容量约束实验 |
+| `scripts/optimize/run_core_parameter_stability_cne6.py` | 生成主策略核心参数稳定性验证 |
+| `scripts/analysis/run_residual_attribution_cne6.py` | 生成 residual 归因 |
 
 ## 3. 策略逻辑
 
@@ -66,7 +69,7 @@ CNE6 因子累计收益
 → 每周换仓
 ```
 
-当前参数来自 `scripts/run_factor_timing_v3.py`：
+当前参数来自 `scripts/backtest/run_factor_timing_v3.py`：
 
 ```python
 FactorTimingStrategy(
@@ -109,7 +112,7 @@ FactorTimingStrategy(
 对应图表：
 
 - `output/cne6/factor_timing_l20_s5_b2_e1_n100.png`
-- `output/cne6/images/cumulative_returns_cne6.png`
+- `output/cne6/images/backtest/cumulative_returns_cne6.png`
 
 ### 4.2 年度表现
 
@@ -170,7 +173,7 @@ FactorTimingStrategy(
 对应输出：
 
 - `output/cne6/data/style_factor_attribution_summary_l20_s5_b2_e1_n100.csv`
-- `output/cne6/images/style_factor_attribution_summary_l20_s5_b2_e1_n100.png`
+- `output/cne6/images/analysis/style_factor_attribution_summary_l20_s5_b2_e1_n100.png`
 
 ## 6. 分时段归因
 
@@ -201,7 +204,7 @@ REGIMES = [
 对应输出：
 
 - `output/cne6/data/style_factor_attribution_regime_summary_l20_s5_b2_e1_n100.csv`
-- `output/cne6/images/style_factor_attribution_regime_summary_l20_s5_b2_e1_n100.png`
+- `output/cne6/images/analysis/style_factor_attribution_regime_summary_l20_s5_b2_e1_n100.png`
 
 ## 7. 风格择时有效性与持仓兑现
 
@@ -234,18 +237,18 @@ REGIMES = [
 
 对应输出：
 
-- `output/cne6/images/style_timing_effectiveness_table_l20_s5_b2_e1_n100.png`
-- `output/cne6/images/style_holding_exposure_quality_table_l20_s5_b2_e1_n100.png`
+- `output/cne6/images/analysis/style_timing_effectiveness_table_l20_s5_b2_e1_n100.png`
+- `output/cne6/images/analysis/style_holding_exposure_quality_table_l20_s5_b2_e1_n100.png`
 
-## 8. 交易成本压力测试
+## 8. 交易成本、成交约束与参数验证
 
-当前测试口径：
+旧版测试口径如下，保留用于和前期报告对齐：
 
 ```python
 net_return = (1 - turnover * cost_rate) * (1 + gross_return) - 1
 ```
 
-其中 `turnover` 为单边换手率，`cost_rate` 为单边交易成本。
+其中 `turnover` 为单边换手率，`cost_rate` 为单边交易成本。该口径没有计入买卖双边成交额、首期建仓成本和成交冲击，因此不再作为主决策口径。
 
 | 单边成本 | 期末净值 | 年化收益 | 夏普 | 最大回撤 |
 |---|---:|---:|---:|---:|
@@ -257,55 +260,154 @@ net_return = (1 - turnover * cost_rate) * (1 + gross_return) - 1
 | 50bp | 2.51 | 17.1% | 0.49 | -28.2% |
 | 100bp | 0.78 | -4.1% | -0.25 | -55.8% |
 
+新增实盘友好主口径：
+
+```text
+固定成本 = (买入权重 + 卖出权重) × 10bp
+首期建仓 = 第一期开仓买入 100% 组合权重
+冲击成本 = 交易权重 × 25bp × sqrt(单票成交金额 / 20日ADV)
+```
+
+其中 ADV 使用交易日前可见的前 20 日成交额均值；资金规模分别测试 `1000万/3000万/1亿/3亿/5亿`。结果如下：
+
+| 资金规模 | 期末净值 | 年化收益 | 夏普 | 最大回撤 | 累计固定成本 | 累计冲击成本 | P95平均参与率 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| 1000万 | 4.80 | 30.8% | 0.97 | -20.3% | 46.4% | 4.8% | 0.4% |
+| 3000万 | 4.63 | 30.0% | 0.94 | -20.6% | 46.4% | 8.2% | 1.3% |
+| 1亿 | 4.33 | 28.5% | 0.89 | -21.2% | 46.4% | 15.1% | 4.2% |
+| 3亿 | 3.87 | 26.1% | 0.81 | -22.1% | 46.4% | 26.1% | 12.6% |
+| 5亿 | 3.59 | 24.4% | 0.75 | -22.7% | 46.4% | 33.7% | 21.1% |
+
 结论：
 
-- 在 `10bp-20bp` 单边成本下，策略仍然有较强收益。
-- `50bp` 后收益质量明显恶化。
-- `100bp` 下策略被交易成本打穿。
-- 换手控制是后续优化优先级最高的问题之一。
+- 旧单边 `10bp` 口径下年化为 `37.2%`，明显高于新增主口径下 `1亿` 规模的 `28.5%`，说明原成本假设偏乐观。
+- 固定成本累计约 `46.4%`，主要来自平均单边 `76.9%` 的高换手；这部分与资金规模无关。
+- 冲击成本随资金规模上升明显放大：`1亿` 规模累计冲击成本约 `15.1%`，`5亿` 规模约 `33.7%`。
+- `5亿` 规模下 P95 平均参与率已达 `21.1%`，且单票最大参与率可接近 `19.3倍 ADV`，说明容量约束会成为核心风险。
+- 本报告和投委会口径应以“`10bp` 双边固定成本 + 首期建仓 + ADV 冲击成本”为主，旧单边成本表仅作为历史对照。
 
 对应输出：
 
 - `output/cne6/data/transaction_cost_stress_summary_l20_s5_b2_e1_n100.csv`
-- `output/cne6/images/transaction_cost_stress_l20_s5_b2_e1_n100.png`
+- `output/cne6/images/analysis/transaction_cost_stress_l20_s5_b2_e1_n100.png`
+- `output/cne6/data/transaction_cost_realistic_summary_l20_s5_b2_e1_n100.csv`
+- `output/cne6/data/transaction_cost_realistic_trade_detail_l20_s5_b2_e1_n100.csv`
+- `output/cne6/images/analysis/transaction_cost_realistic_l20_s5_b2_e1_n100.png`
 
-## 9. 因子剔除/降权实验
+### 8.1 成交可实现性与容量约束
 
-实验目标：验证是否可以通过剔除或降权问题因子提升策略表现。
+在新增主成本口径基础上，进一步加入成交约束：单票交易金额不得超过 `5%/10%/20% ADV`；买入遇到涨停、卖出遇到跌停时视为不可成交。由于当前缓存没有上下限价字段，涨跌停使用 `pct_chg` 阈值近似识别。未成交旧持仓继续保留，未完成买入部分保留为现金。
 
-主实验在 `20bp` 成本后的净年化结果：
+核心对比结果如下：
 
-| 场景 | 20bp净年化 | 相对原始 | 平均换手 | 最大回撤 |
-|---|---:|---:|---:|---:|
-| 原始全部因子 | 31.9% | 0.0% | 76.9% | -18.0% |
-| 核心加权，问题因子降权 | 30.5% | -1.3% | 75.1% | -18.9% |
-| 问题因子降权 | 29.0% | -2.8% | 76.4% | -19.1% |
-| 只保留核心和次级正贡献因子 | 28.9% | -2.9% | 74.3% | -20.3% |
-| 剔除全样本负贡献因子 | 28.7% | -3.2% | 76.4% | -19.5% |
-| 剔除 TOPSI/STOQ/HISTVOL | 28.2% | -3.6% | 76.9% | -20.1% |
+| 场景 | 资金规模 | ADV上限 | 净年化 | 夏普 | 最大回撤 | 成交完成率 | 目标持仓兑现 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| baseline | 1亿 | 10% | 23.2% | 0.74 | -21.2% | 96.5% | 96.6% |
+| baseline | 3亿 | 10% | 19.9% | 0.64 | -21.5% | 91.9% | 91.4% |
+| baseline | 5亿 | 10% | 16.6% | 0.54 | -23.2% | 85.8% | 84.3% |
+| tc50_buf2 | 1亿 | 10% | 25.6% | 0.83 | -21.2% | 94.6% | 96.9% |
+| tc50_buf2 | 3亿 | 10% | 23.7% | 0.76 | -21.7% | 89.9% | 93.5% |
+| tc50_buf2 | 5亿 | 10% | 21.8% | 0.71 | -21.9% | 83.1% | 88.3% |
 
-单因子剔除留一法中，只有少数因子剔除后略有改善：
-
-| 场景 | 20bp净年化 | 相对原始 | 最大回撤 |
-|---|---:|---:|---:|
-| 只剔除 EYIELD | 32.5% | +0.7% | -20.3% |
-| 只剔除 LP | 32.5% | +0.7% | -20.3% |
-| 只剔除 BLEV | 32.4% | +0.5% | -19.7% |
-| 只剔除 STOM | 31.9% | +0.1% | -18.0% |
-
-结论：
-
-- 简单剔除 `TOPSI/STOQ/HISTVOL` 这类问题因子并没有提升策略。
-- 全样本负贡献因子不等于应该剔除的因子。
-- 因子通过余弦相似度共同决定股票集合，单个因子的负归因可能仍在选股结构中发挥筛选作用。
-- 后续更值得做的是滚动可靠性加权，而不是静态样本内剔除。
+这一结果改变了对换手控制的评价：在旧单边成本口径下，baseline 净年化高于 `tc50_buf2`；但在成交约束口径下，`tc50_buf2` 在 `1亿/3亿/5亿` 主要规模上均优于 baseline。尤其在 `5亿`、`10% ADV` 上限下，baseline 净年化约 `16.6%`，`tc50_buf2` 约 `21.8%`。因此，换手控制不只是降低交易复杂度，而是在容量约束下显著改善实际可实现收益。
 
 对应输出：
 
-- `output/cne6/data/factor_weight_experiment_summary_l20_s5_b2_e1_n100.csv`
-- `output/cne6/images/factor_weight_experiment_l20_s5_b2_e1_n100.png`
+- `output/cne6/data/execution_capacity_summary_l20_s5_b2_e1_n100.csv`
+- `output/cne6/data/execution_capacity_trade_detail_l20_s5_b2_e1_n100.csv`
+- `output/cne6/images/optimize/execution_capacity_experiment_l20_s5_b2_e1_n100.png`
 
-## 10. Residual 归因
+### 8.2 成交约束下的换手参数重估
+
+在确认换手控制能改善成交可实现性后，本报告进一步扩展参数网格：`max_turnover=20%/30%/40%/50%/60%`，`buffer_multiplier=1.5/2.0/3.0/4.0`。所有参数均在 `1亿/3亿/5亿` 资金规模和 `5%/10%/20% ADV` 上限下重估，并按平均净年化、最低净年化、回撤、成交完成率、目标持仓兑现、现金占比和年度稳定性做综合评分。
+
+综合排名前列如下：
+
+| 排名 | 场景 | 综合评分 | 平均净年化 | 最低净年化 | 平均回撤 | 成交完成率 | 目标兑现 | 平均现金 |
+|---:|---|---:|---:|---:|---:|---:|---:|---:|
+| 1 | `tc50_buf3` | 0.831 | 23.4% | 19.5% | -21.8% | 87.9% | 91.6% | 3.7% |
+| 2 | `tc50_buf2` | 0.827 | 23.4% | 19.0% | -21.6% | 87.7% | 91.6% | 3.6% |
+| 3 | `tc50_buf4` | 0.826 | 23.5% | 19.7% | -22.2% | 87.1% | 91.2% | 3.5% |
+| 4 | `tc30_buf4` | 0.789 | 22.5% | 19.5% | -22.7% | 86.0% | 94.0% | 2.1% |
+| 5 | `tc40_buf4` | 0.770 | 22.4% | 19.1% | -22.1% | 86.8% | 92.6% | 2.8% |
+
+在 `10% ADV` 上限下，`tc50_buf3` 的净年化分别为：`1亿` 约 `25.2%`，`3亿` 约 `24.0%`，`5亿` 约 `22.3%`；对应 baseline 分别约为 `23.2%`、`19.9%`、`16.6%`。因此，成交约束下的参数选择不应追求最低换手，而应在 alpha 保留和交易可完成之间取平衡。全样本重估下 `tc50_buf3` 暂时领先，但 `tc50_buf2/3/4` 分数差距很小，应理解为 50% 最大换手附近的稳定平台，而不是单点参数显著胜出。
+
+对应输出：
+
+- `output/cne6/data/execution_turnover_revaluation_summary_l20_s5_b2_e1_n100.csv`
+- `output/cne6/data/execution_turnover_revaluation_ranking_l20_s5_b2_e1_n100.csv`
+- `output/cne6/data/execution_turnover_revaluation_annual_l20_s5_b2_e1_n100.csv`
+- `output/cne6/images/optimize/execution_turnover_revaluation_l20_s5_b2_e1_n100.png`
+
+### 8.3 成交约束下的 walk-forward 验证
+
+为检验 `tc50_buf3` 是否只是全样本调参收益，本报告继续做年度 walk-forward 验证：用过去 3 年训练期在全参数网格中选参，下一年样本外执行。训练期分别选中：2023 年样本外使用 `tc30_buf3`，2024 年使用 `tc50_buf3`，2025 年使用 `tc50_buf2`。样本外目标持仓重新组成 `walk_forward_selected` 后连续执行成交模拟，baseline 和固定 `tc50_buf2/3/4` 均从 2023 年同一起点比较。
+
+综合 `1亿/3亿/5亿` 与 `5%/10%/20% ADV` 的样本外均值如下：
+
+| 场景 | 平均净年化 | 最低净年化 | 平均回撤 | 成交完成率 | 平均现金 |
+|---|---:|---:|---:|---:|---:|
+| baseline | 18.5% | 10.9% | -21.9% | 89.4% | 6.4% |
+| `tc50_buf2` | 21.8% | 17.8% | -21.6% | 88.4% | 3.8% |
+| `tc50_buf3` | 21.4% | 17.8% | -21.9% | 88.2% | 3.8% |
+| `tc50_buf4` | 21.7% | 18.3% | -22.3% | 88.0% | 3.8% |
+| walk-forward selected | 20.1% | 16.1% | -21.7% | 88.0% | 3.1% |
+
+在 `10% ADV`、`5亿` 的关键容量口径下，baseline 样本外净年化约 `15.2%`，固定 `tc50_buf2/3/4` 分别约 `20.2%/20.5%/20.7%`，walk-forward selected 约 `18.5%`。因此，换手控制的样本外价值成立，但动态选参没有成立。当前更稳妥的生产表述是：维持 `tc50_buf2` 为默认候选，承认 `tc50_buf2/3/4` 属于同一稳定平台；不把 `tc50_buf3` 的全样本第一名解释为单点显著优势。
+
+对应输出：
+
+- `output/cne6/data/execution_turnover_walk_forward_summary_l20_s5_b2_e1_n100.csv`
+- `output/cne6/data/execution_turnover_walk_forward_annual_l20_s5_b2_e1_n100.csv`
+- `output/cne6/data/execution_turnover_walk_forward_folds_l20_s5_b2_e1_n100.csv`
+- `output/cne6/data/execution_turnover_walk_forward_train_scores_l20_s5_b2_e1_n100.csv`
+- `output/cne6/images/optimize/execution_turnover_walk_forward_l20_s5_b2_e1_n100.png`
+
+### 8.4 主策略核心参数稳定性验证
+
+在执行层固定为 `tc50_buf2` 后，本报告进一步检验核心择时参数是否稳定。参数网格为：`long_prd=10/20/40`，`short_prd=3/5/10`，`channel_bins=2/3`，`top_n=80/100/120`，`extreme_value=1`。所有组合均在成交约束口径下评估。
+
+全样本综合排名前列如下：
+
+| 排名 | 参数 | 综合评分 | 平均净年化 | 最低净年化 | 平均回撤 | 成交完成率 | 平均现金 |
+|---:|---|---:|---:|---:|---:|---:|---:|
+| 1 | `L20/S3/B3/N120` | 0.895 | 24.1% | 21.0% | -20.7% | 90.3% | 3.2% |
+| 2 | `L20/S5/B2/N120` | 0.873 | 24.4% | 21.2% | -22.2% | 89.4% | 2.8% |
+| 3 | `L40/S3/B3/N120` | 0.861 | 23.6% | 20.7% | -21.8% | 90.9% | 3.5% |
+| 4 | `L20/S3/B2/N120` | 0.814 | 22.4% | 19.1% | -19.7% | 90.1% | 2.9% |
+| 7 | 当前 `L20/S5/B2/N100` | 0.742 | 23.4% | 19.0% | -21.6% | 87.7% | 3.6% |
+
+当前参数排名 `7/54`，说明它不是全样本最优，但仍处于前排平台；不能简单判定为过拟合孤岛。前排组合明显偏向 `top_n=120` 和 `short_prd=3`，说明在成交约束下，适度增加持仓数量、缩短短周期过滤窗口可能改善容量后的收益质量。
+
+年度 walk-forward 使用 `3年训练 + 1年样本外`。训练期选参路径为：
+
+| 样本外年份 | 训练区间 | 训练期选中参数 |
+|---:|---|---|
+| 2023 | 2020-2022 | `L20/S5/B2/N120` |
+| 2024 | 2021-2023 | `L20/S5/B3/N100` |
+| 2025 | 2022-2024 | `L20/S3/B3/N120` |
+
+样本外综合均值如下：
+
+| 场景 | 平均净年化 | 最低净年化 | 平均回撤 | 成交完成率 | 平均现金 |
+|---|---:|---:|---:|---:|---:|
+| 当前 `L20/S5/B2/N100` | 21.8% | 17.8% | -21.6% | 88.4% | 3.8% |
+| walk-forward selected | 23.0% | 20.2% | -22.3% | 89.0% | 3.2% |
+| `L20/S3/B3/N120` | 25.4% | 22.0% | -20.7% | 89.6% | 2.8% |
+| `L40/S3/B3/N120` | 28.5% | 24.4% | -21.8% | 91.0% | 3.3% |
+
+这个结果比前面的换手参数动态选参更积极：核心参数 walk-forward selected 相比当前参数有提升，样本外平均净年化约 `23.0%`，高于当前参数的 `21.8%`。但选参路径仍不稳定，而且固定 `L20/S3/B3/N120`、`L40/S3/B3/N120` 的表现包含全样本筛选偏差。因此，当前结论不是马上替换生产参数，而是把 `S3/N120` 一带列为二期观察候选。
+
+对应输出：
+
+- `output/cne6/data/core_parameter_stability_ranking_l20_s5_b2_e1_n100.csv`
+- `output/cne6/data/core_parameter_stability_execution_summary_l20_s5_b2_e1_n100.csv`
+- `output/cne6/data/core_parameter_stability_walk_forward_summary_l20_s5_b2_e1_n100.csv`
+- `output/cne6/data/core_parameter_stability_walk_forward_folds_l20_s5_b2_e1_n100.csv`
+- `output/cne6/images/optimize/core_parameter_stability_l20_s5_b2_e1_n100.png`
+
+## 9. Residual 归因
 
 Residual 定义：
 
@@ -343,15 +445,15 @@ Residual = 策略实际收益 - CNE6 风格因子解释收益
 
 - `output/cne6/data/residual_attribution_summary_l20_s5_b2_e1_n100.csv`
 - `output/cne6/data/residual_attribution_bucket_l20_s5_b2_e1_n100.csv`
-- `output/cne6/images/residual_attribution_l20_s5_b2_e1_n100.png`
+- `output/cne6/images/analysis/residual_attribution_l20_s5_b2_e1_n100.png`
 
 限制：
 
-当前缓存没有行业分类字段，因此本版 residual 归因尚未拆分行业贡献。`src/models/barra_cne6.py` 中会读取行业分类，但目前没有把行业暴露或行业标签保存到 `output/cne6/data`。如需行业 residual 归因，建议新增行业缓存输出。
+受当前数据源和缓存字段限制，本版 residual 归因不进一步拆分行业贡献；行业维度不纳入当前定稿结论。
 
-## 11. 风险与局限
+## 10. 风险与局限
 
-### 11.1 高换手风险
+### 10.1 高换手风险
 
 平均单边换手为 `76.9%`，中位数为 `79.0%`。这会带来：
 
@@ -360,139 +462,114 @@ Residual = 策略实际收益 - CNE6 风格因子解释收益
 - 对停牌、涨跌停、流动性的敏感性。
 - 实盘容量约束。
 
-### 11.2 Residual 来源不够纯
+### 10.2 Residual 来源不够纯
 
 Residual 占策略收益 `45.8%`，但扣除全市场等权共同项后只剩 `4.9%`。这说明策略有很大一部分收益来自小票/全市场等权共同行情，而不完全是稳定选股 alpha。
 
-### 11.3 年度稳定性
+### 10.3 年度稳定性
 
 2024 年波动明显升高，年化波动约 `50.0%`，夏普仅 `0.39`。策略在某些市场状态下可能暴露出较强的高 beta、高波动或拥挤交易风险。
 
-### 11.4 样本内因子实验的局限
+### 10.4 样本内因子实验的局限
 
 因子剔除和降权实验均为样本内诊断，不能直接作为上线参数选择。尤其当因子共同决定股票集合时，单因子贡献和最终组合表现之间并非线性关系。
 
-### 11.5 行业归因缺失
+## 11. 最终定稿结论
 
-当前输出缺少行业标签，无法判断 residual 是否来自特定行业或主题。如果后续要做更接近 Barra 完整风险模型的归因，需要补充行业和国家因子维度。
+本报告的定稿版本不再继续追加复杂优化。前文已经完成成本重估、成交约束、换手控制、核心参数稳定性和 residual 归因。综合这些证据后，当前更合适的处理不是追逐全样本最优参数，而是给出一个可解释、可复现、可进入纸面跟踪的研究版方案。
 
-## 12. 优化建议
+### 11.1 正式保留方案
 
-### 12.1 优先做换手控制
+正式保留的策略版本如下：
 
-建议方向：
+| 模块 | 定稿选择 |
+|---|---|
+| 核心策略 | CNE6 风格择时 + 余弦相似度选股 |
+| 核心参数 | `long_prd=20, short_prd=5, channel_bins=2, extreme_value=1, top_n=100` |
+| 执行层 | `max_turnover=50%`, `buffer_multiplier=2.0`，即 `tc50_buf2` |
+| 主成本口径 | `10bp` 双边固定成本 + 首期建仓 + ADV 平方根冲击成本 |
+| 主容量口径 | `1亿/3亿/5亿` 资金规模，重点看 `10% ADV` 上限 |
 
-- 加入持仓缓冲区：新股相似度必须显著高于老股才替换。
-- 限制单期最大替换数量，例如每周最多替换 30-50 只。
-- 在选股目标函数中加入换手惩罚。
-- 对预期收益边际较弱的换仓动作不执行。
+这个版本的定位不是“收益最大化版本”，而是“成交约束友好的研究版”。它保留原始风格择时信号和股票排序逻辑，只在持仓更新环节加入换手缓冲和单期换手上限。
 
-目标不是单纯降低换手，而是在 `20bp-50bp` 成本区间内提高净收益质量。
+在 `10% ADV` 上限下，`tc50_buf2` 相比 baseline 的主要改善如下：
 
-### 12.2 从静态因子剔除改为滚动可靠性加权
+| 资金规模 | baseline净年化 | `tc50_buf2`净年化 | 主要变化 |
+|---:|---:|---:|---|
+| 1亿 | 23.2% | 25.6% | 收益略升，目标兑现维持高位 |
+| 3亿 | 19.9% | 23.7% | 容量衰减明显减轻 |
+| 5亿 | 16.6% | 21.8% | 现金拖累和冲击成本明显改善 |
 
-不建议直接剔除 `TOPSI/STOQ/HISTVOL`，因为样本内实验显示简单剔除会降低净年化。建议改为滚动权重：
+walk-forward 样本外验证也支持这一选择：固定 `tc50_buf2` 的样本外平均净年化约 `21.8%`，高于动态换手参数选参的 `20.1%`。因此，当前不采用 `tc50_buf3` 或动态换手选参作为正式版本。
 
-```text
-因子权重 = f(过去窗口信号命中率、持仓命中率、实际贡献、波动稳定性)
-```
+### 11.2 观察候选
 
-可测试窗口：
+主策略核心参数稳定性验证显示，当前 `L20/S5/B2/N100` 排名 `7/54`，不是全样本最优，但处在前排平台内。以下组合可以作为二期观察候选：
 
-- 52周滚动可靠性
-- 104周滚动可靠性
-- 指数加权滚动可靠性
+| 候选参数 | 观察理由 |
+|---|---|
+| `L20/S3/B3/N120` | 全样本综合排名第一，样本外表现较强 |
+| `L20/S5/B2/N120` | 与当前参数最接近，仅扩大 `top_n`，解释成本最低 |
+| `L40/S3/B3/N120` | 样本外表现突出，但参数迁移幅度较大 |
 
-### 12.3 增加风险暴露约束
+这些候选暂不替换正式版本。原因是它们仍然来自后验筛选，且 walk-forward 选参路径并不稳定。更稳妥的做法是进入后续纸面跟踪或小规模仿真，而不是直接改生产参数。
 
-基于 residual 归因，建议监控或约束：
+### 11.3 舍弃方向
 
-- `SIZE Q1` 小市值暴露
-- `BETA Q5` 高 beta 暴露
-- `RESVOL Q4/Q5` 高残差波动暴露
-- 单期组合波动和回撤触发器
+以下方向不纳入当前正式方案：
 
-### 12.4 补充行业归因
+| 方向 | 处理结论 |
+|---|---|
+| 因子剔除/静态降权 | 不保留。简单按样本内因子贡献删因子没有改善净收益，且破坏余弦相似度选股的交互结构 |
+| 滚动可靠性加权 | 不保留。全样本网格中曾有改善，但 walk-forward 样本外未跑赢简单换手控制 |
+| 成交约束下动态换手选参 | 不保留。样本外低于固定 `tc50_buf2/3/4` |
+| 复杂综合目标函数 | 不继续推进。引入收益、容量、回撤、成交率等多组主观权重，容易形成新的二次调参 |
 
-建议将行业字段保存到输出目录，例如：
+这些结论并不意味着相关诊断无价值。它们的作用是帮助确定边界：当前策略的主要改进来自交易执行层，而不是对风格因子或参数评分函数做更复杂的后验加工。
 
-```text
-output/cne6/data/industry_exposure_cne6.csv
-```
+### 11.4 上线建议
 
-或在 `factor_exposure_cne6.csv` 中追加 `sw_l1`。这样 residual 可以继续拆成：
+当前策略具备较强样本内表现，并在成本和成交约束下保留了一定可实现收益。但它的 residual 中有较大比例接近全市场等权共同项，说明收益并不完全来自纯粹、稳定的风格择时 alpha。同时，策略仍然依赖小市值、高弹性股票池，容量对 ADV、涨跌停和换手控制较敏感。
 
-```text
-Residual = 市场共同项 + 行业项 + 风格遗漏项 + 个股特异项
-```
+因此，本报告建议：
 
-### 12.5 做样本外和参数稳健性测试
+- 将当前版本作为研究候选进入纸面跟踪或小规模仿真。
+- 暂不按全样本最优参数上线。
+- 暂不引入复杂目标函数和滚动动态选参。
+- 后续若进入实盘前评审，应优先补充真实涨跌停字段、停复牌细节、逐笔冲击模型和交易通道约束。
 
-建议测试：
+一句话定稿结论：
 
-- 不同 `long_prd/short_prd/channel_bins/extreme_value/top_n`
-- 不同换仓频率
-- 不同股票数量
-- 不同市场阶段训练/验证切分
-- 滚动 walk-forward 参数选择
+> 当前策略可以作为“CNE6 风格择时 + 换手控制”的成交约束友好研究版保留，但不宜包装为已经完成实盘上线验证的最终生产策略。
 
-## 13. 复现命令
+## 12. 复现命令与输出索引
 
-主策略：
-
-```powershell
-python scripts\run_factor_timing_v3.py
-```
-
-完整风格归因：
+定稿版主链路只保留支撑最终结论的复现入口：
 
 ```powershell
-python scripts\run_style_factor_attribution_cne6.py
+python scripts\backtest\run_factor_timing_v3.py
+python scripts\analysis\run_style_factor_attribution_cne6.py
+python scripts\analysis\run_transaction_cost_stress_cne6.py
+python scripts\optimize\run_execution_capacity_experiment_cne6.py
+python scripts\optimize\run_execution_turnover_revaluation_cne6.py
+python scripts\optimize\run_execution_turnover_walk_forward_cne6.py
+python scripts\optimize\run_core_parameter_stability_cne6.py
+python scripts\analysis\run_residual_attribution_cne6.py
 ```
 
-交易成本压力测试：
-
-```powershell
-python scripts\run_transaction_cost_stress_cne6.py
-```
-
-因子剔除/降权实验：
-
-```powershell
-python scripts\run_factor_weight_experiment_cne6.py
-```
-
-Residual 归因：
-
-```powershell
-python scripts\run_residual_attribution_cne6.py
-```
-
-## 14. 主要输出文件索引
+主要输出文件如下：
 
 | 文件 | 说明 |
 |---|---|
-| `output/cne6/data/portfolio_returns_l20_s5_b2_e1_n100.csv` | 策略周度收益与持仓 |
+| `output/cne6/data/portfolio_returns_l20_s5_b2_e1_n100.csv` | 当前核心参数下的策略周度收益与持仓 |
 | `output/cne6/data/optimal_vectors_l20_s5_b2_e1_n100.csv` | 每期理想风格向量 |
 | `output/cne6/data/style_factor_attribution_summary_l20_s5_b2_e1_n100.csv` | 全样本风格归因汇总 |
-| `output/cne6/data/style_factor_attribution_regime_summary_l20_s5_b2_e1_n100.csv` | 分时段风格归因汇总 |
 | `output/cne6/data/style_timing_effectiveness_summary_l20_s5_b2_e1_n100.csv` | 风格择时有效性汇总 |
 | `output/cne6/data/style_holding_exposure_quality_summary_l20_s5_b2_e1_n100.csv` | 持仓内部暴露质量汇总 |
-| `output/cne6/data/transaction_cost_stress_summary_l20_s5_b2_e1_n100.csv` | 交易成本压力测试汇总 |
-| `output/cne6/data/factor_weight_experiment_summary_l20_s5_b2_e1_n100.csv` | 因子剔除/降权实验汇总 |
+| `output/cne6/data/transaction_cost_realistic_summary_l20_s5_b2_e1_n100.csv` | 双边、首期建仓和 ADV 冲击成本主口径汇总 |
+| `output/cne6/data/execution_capacity_summary_l20_s5_b2_e1_n100.csv` | 成交可实现性与容量约束实验汇总 |
+| `output/cne6/data/execution_turnover_revaluation_ranking_l20_s5_b2_e1_n100.csv` | 成交约束下换手参数综合评分排名 |
+| `output/cne6/data/execution_turnover_walk_forward_summary_l20_s5_b2_e1_n100.csv` | 换手参数样本外验证汇总 |
+| `output/cne6/data/core_parameter_stability_ranking_l20_s5_b2_e1_n100.csv` | 主策略核心参数成交约束综合排名 |
+| `output/cne6/data/core_parameter_stability_walk_forward_summary_l20_s5_b2_e1_n100.csv` | 主策略核心参数样本外验证汇总 |
 | `output/cne6/data/residual_attribution_summary_l20_s5_b2_e1_n100.csv` | Residual 主组件汇总 |
-| `output/cne6/data/residual_attribution_bucket_l20_s5_b2_e1_n100.csv` | Residual 暴露分组汇总 |
-
-## 15. 后续修订记录
-
-| 日期 | 修改人 | 修改内容 |
-|---|---|---|
-| 2026-04-30 | Codex | 初版策略报告 |
-
-## 16. 待补充问题
-
-- 是否引入行业分类缓存并补充行业 residual 归因？
-- 是否把交易成本测试扩展为双边成交额口径？
-- 是否将换手缓冲机制写入策略主流程？
-- 是否新增滚动可靠性加权策略版本？
-- 是否做参数网格和 walk-forward 样本外测试？

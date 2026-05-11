@@ -18,7 +18,7 @@ if PROJECT_ROOT not in sys.path:
 # 输出目录与参数后缀，和 run_factor_timing_v3.py 生成的结果保持一致
 OUTPUT_DIR = os.path.join(PROJECT_ROOT, "output", "cne6")
 DATA_DIR = os.path.join(OUTPUT_DIR, "data")
-IMAGE_DIR = os.path.join(OUTPUT_DIR, "images")
+IMAGE_DIR = os.path.join(OUTPUT_DIR, "images", "analysis")
 
 SUFFIX = "l20_s5_b2_e1_n100"
 

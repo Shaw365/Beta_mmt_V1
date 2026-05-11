@@ -16,7 +16,7 @@ if PROJECT_ROOT not in sys.path:
 
 OUTPUT_DIR = os.path.join(PROJECT_ROOT, "output", "cne6")
 DATA_DIR = os.path.join(OUTPUT_DIR, "data")
-IMAGE_DIR = os.path.join(OUTPUT_DIR, "images")
+IMAGE_DIR = os.path.join(OUTPUT_DIR, "images", "analysis")
 
 SUFFIX = "l20_s5_b2_e1_n100"
 
