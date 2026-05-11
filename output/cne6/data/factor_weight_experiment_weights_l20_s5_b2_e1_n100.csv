@@ -1,0 +1,776 @@
+﻿scenario,description,factor,weight
+baseline_all_factors,原始全部风格因子等权,SIZE,1.0
+baseline_all_factors,原始全部风格因子等权,MIDCAP,1.0
+baseline_all_factors,原始全部风格因子等权,BETA,1.0
+baseline_all_factors,原始全部风格因子等权,RESVOL,1.0
+baseline_all_factors,原始全部风格因子等权,HISTVOL,1.0
+baseline_all_factors,原始全部风格因子等权,MOMENTUM,1.0
+baseline_all_factors,原始全部风格因子等权,RESMOM,1.0
+baseline_all_factors,原始全部风格因子等权,BTOP,1.0
+baseline_all_factors,原始全部风格因子等权,EYIELD,1.0
+baseline_all_factors,原始全部风格因子等权,CFP,1.0
+baseline_all_factors,原始全部风格因子等权,SP,1.0
+baseline_all_factors,原始全部风格因子等权,LP,1.0
+baseline_all_factors,原始全部风格因子等权,EGRO,1.0
+baseline_all_factors,原始全部风格因子等权,SGRO,1.0
+baseline_all_factors,原始全部风格因子等权,MLEV,1.0
+baseline_all_factors,原始全部风格因子等权,BLEV,1.0
+baseline_all_factors,原始全部风格因子等权,LIQUIDITY,1.0
+baseline_all_factors,原始全部风格因子等权,STOM,1.0
+baseline_all_factors,原始全部风格因子等权,STOQ,1.0
+baseline_all_factors,原始全部风格因子等权,ROE,1.0
+baseline_all_factors,原始全部风格因子等权,ROA,1.0
+baseline_all_factors,原始全部风格因子等权,CAPX,1.0
+baseline_all_factors,原始全部风格因子等权,AGRO,1.0
+baseline_all_factors,原始全部风格因子等权,TOPSI,1.0
+baseline_all_factors,原始全部风格因子等权,SEASON,1.0
+drop_3_problem,剔除 TOPSI/STOQ/HISTVOL,SIZE,1.0
+drop_3_problem,剔除 TOPSI/STOQ/HISTVOL,MIDCAP,1.0
+drop_3_problem,剔除 TOPSI/STOQ/HISTVOL,BETA,1.0
+drop_3_problem,剔除 TOPSI/STOQ/HISTVOL,RESVOL,1.0
+drop_3_problem,剔除 TOPSI/STOQ/HISTVOL,HISTVOL,0.0
+drop_3_problem,剔除 TOPSI/STOQ/HISTVOL,MOMENTUM,1.0
+drop_3_problem,剔除 TOPSI/STOQ/HISTVOL,RESMOM,1.0
+drop_3_problem,剔除 TOPSI/STOQ/HISTVOL,BTOP,1.0
+drop_3_problem,剔除 TOPSI/STOQ/HISTVOL,EYIELD,1.0
+drop_3_problem,剔除 TOPSI/STOQ/HISTVOL,CFP,1.0
+drop_3_problem,剔除 TOPSI/STOQ/HISTVOL,SP,1.0
+drop_3_problem,剔除 TOPSI/STOQ/HISTVOL,LP,1.0
+drop_3_problem,剔除 TOPSI/STOQ/HISTVOL,EGRO,1.0
+drop_3_problem,剔除 TOPSI/STOQ/HISTVOL,SGRO,1.0
+drop_3_problem,剔除 TOPSI/STOQ/HISTVOL,MLEV,1.0
+drop_3_problem,剔除 TOPSI/STOQ/HISTVOL,BLEV,1.0
+drop_3_problem,剔除 TOPSI/STOQ/HISTVOL,LIQUIDITY,1.0
+drop_3_problem,剔除 TOPSI/STOQ/HISTVOL,STOM,1.0
+drop_3_problem,剔除 TOPSI/STOQ/HISTVOL,STOQ,0.0
+drop_3_problem,剔除 TOPSI/STOQ/HISTVOL,ROE,1.0
+drop_3_problem,剔除 TOPSI/STOQ/HISTVOL,ROA,1.0
+drop_3_problem,剔除 TOPSI/STOQ/HISTVOL,CAPX,1.0
+drop_3_problem,剔除 TOPSI/STOQ/HISTVOL,AGRO,1.0
+drop_3_problem,剔除 TOPSI/STOQ/HISTVOL,TOPSI,0.0
+drop_3_problem,剔除 TOPSI/STOQ/HISTVOL,SEASON,1.0
+drop_6_negative,剔除全样本负贡献因子,SIZE,1.0
+drop_6_negative,剔除全样本负贡献因子,MIDCAP,1.0
+drop_6_negative,剔除全样本负贡献因子,BETA,1.0
+drop_6_negative,剔除全样本负贡献因子,RESVOL,1.0
+drop_6_negative,剔除全样本负贡献因子,HISTVOL,0.0
+drop_6_negative,剔除全样本负贡献因子,MOMENTUM,1.0
+drop_6_negative,剔除全样本负贡献因子,RESMOM,1.0
+drop_6_negative,剔除全样本负贡献因子,BTOP,1.0
+drop_6_negative,剔除全样本负贡献因子,EYIELD,1.0
+drop_6_negative,剔除全样本负贡献因子,CFP,1.0
+drop_6_negative,剔除全样本负贡献因子,SP,0.0
+drop_6_negative,剔除全样本负贡献因子,LP,1.0
+drop_6_negative,剔除全样本负贡献因子,EGRO,1.0
+drop_6_negative,剔除全样本负贡献因子,SGRO,1.0
+drop_6_negative,剔除全样本负贡献因子,MLEV,0.0
+drop_6_negative,剔除全样本负贡献因子,BLEV,1.0
+drop_6_negative,剔除全样本负贡献因子,LIQUIDITY,1.0
+drop_6_negative,剔除全样本负贡献因子,STOM,0.0
+drop_6_negative,剔除全样本负贡献因子,STOQ,0.0
+drop_6_negative,剔除全样本负贡献因子,ROE,1.0
+drop_6_negative,剔除全样本负贡献因子,ROA,1.0
+drop_6_negative,剔除全样本负贡献因子,CAPX,1.0
+drop_6_negative,剔除全样本负贡献因子,AGRO,1.0
+drop_6_negative,剔除全样本负贡献因子,TOPSI,0.0
+drop_6_negative,剔除全样本负贡献因子,SEASON,1.0
+downweight_problem,问题因子降权而不完全剔除,SIZE,1.0
+downweight_problem,问题因子降权而不完全剔除,MIDCAP,1.0
+downweight_problem,问题因子降权而不完全剔除,BETA,1.0
+downweight_problem,问题因子降权而不完全剔除,RESVOL,1.0
+downweight_problem,问题因子降权而不完全剔除,HISTVOL,0.25
+downweight_problem,问题因子降权而不完全剔除,MOMENTUM,1.0
+downweight_problem,问题因子降权而不完全剔除,RESMOM,1.0
+downweight_problem,问题因子降权而不完全剔除,BTOP,1.0
+downweight_problem,问题因子降权而不完全剔除,EYIELD,1.0
+downweight_problem,问题因子降权而不完全剔除,CFP,1.0
+downweight_problem,问题因子降权而不完全剔除,SP,0.5
+downweight_problem,问题因子降权而不完全剔除,LP,1.0
+downweight_problem,问题因子降权而不完全剔除,EGRO,1.0
+downweight_problem,问题因子降权而不完全剔除,SGRO,1.0
+downweight_problem,问题因子降权而不完全剔除,MLEV,0.5
+downweight_problem,问题因子降权而不完全剔除,BLEV,1.0
+downweight_problem,问题因子降权而不完全剔除,LIQUIDITY,1.0
+downweight_problem,问题因子降权而不完全剔除,STOM,0.5
+downweight_problem,问题因子降权而不完全剔除,STOQ,0.25
+downweight_problem,问题因子降权而不完全剔除,ROE,1.0
+downweight_problem,问题因子降权而不完全剔除,ROA,1.0
+downweight_problem,问题因子降权而不完全剔除,CAPX,1.0
+downweight_problem,问题因子降权而不完全剔除,AGRO,1.0
+downweight_problem,问题因子降权而不完全剔除,TOPSI,0.25
+downweight_problem,问题因子降权而不完全剔除,SEASON,1.0
+boost_core_downweight_problem,核心贡献因子加权，问题因子降权,SIZE,1.5
+boost_core_downweight_problem,核心贡献因子加权，问题因子降权,MIDCAP,1.5
+boost_core_downweight_problem,核心贡献因子加权，问题因子降权,BETA,1.5
+boost_core_downweight_problem,核心贡献因子加权，问题因子降权,RESVOL,1.5
+boost_core_downweight_problem,核心贡献因子加权，问题因子降权,HISTVOL,0.25
+boost_core_downweight_problem,核心贡献因子加权，问题因子降权,MOMENTUM,1.0
+boost_core_downweight_problem,核心贡献因子加权，问题因子降权,RESMOM,1.5
+boost_core_downweight_problem,核心贡献因子加权，问题因子降权,BTOP,1.0
+boost_core_downweight_problem,核心贡献因子加权，问题因子降权,EYIELD,1.0
+boost_core_downweight_problem,核心贡献因子加权，问题因子降权,CFP,1.0
+boost_core_downweight_problem,核心贡献因子加权，问题因子降权,SP,0.5
+boost_core_downweight_problem,核心贡献因子加权，问题因子降权,LP,1.0
+boost_core_downweight_problem,核心贡献因子加权，问题因子降权,EGRO,1.0
+boost_core_downweight_problem,核心贡献因子加权，问题因子降权,SGRO,1.0
+boost_core_downweight_problem,核心贡献因子加权，问题因子降权,MLEV,0.5
+boost_core_downweight_problem,核心贡献因子加权，问题因子降权,BLEV,1.0
+boost_core_downweight_problem,核心贡献因子加权，问题因子降权,LIQUIDITY,1.5
+boost_core_downweight_problem,核心贡献因子加权，问题因子降权,STOM,0.5
+boost_core_downweight_problem,核心贡献因子加权，问题因子降权,STOQ,0.25
+boost_core_downweight_problem,核心贡献因子加权，问题因子降权,ROE,1.0
+boost_core_downweight_problem,核心贡献因子加权，问题因子降权,ROA,1.0
+boost_core_downweight_problem,核心贡献因子加权，问题因子降权,CAPX,1.5
+boost_core_downweight_problem,核心贡献因子加权，问题因子降权,AGRO,1.0
+boost_core_downweight_problem,核心贡献因子加权，问题因子降权,TOPSI,0.25
+boost_core_downweight_problem,核心贡献因子加权，问题因子降权,SEASON,1.0
+core_positive_only,只保留核心和次级正贡献因子,SIZE,1.0
+core_positive_only,只保留核心和次级正贡献因子,MIDCAP,1.0
+core_positive_only,只保留核心和次级正贡献因子,BETA,1.0
+core_positive_only,只保留核心和次级正贡献因子,RESVOL,1.0
+core_positive_only,只保留核心和次级正贡献因子,HISTVOL,0.0
+core_positive_only,只保留核心和次级正贡献因子,MOMENTUM,0.0
+core_positive_only,只保留核心和次级正贡献因子,RESMOM,1.0
+core_positive_only,只保留核心和次级正贡献因子,BTOP,0.75
+core_positive_only,只保留核心和次级正贡献因子,EYIELD,0.75
+core_positive_only,只保留核心和次级正贡献因子,CFP,0.75
+core_positive_only,只保留核心和次级正贡献因子,SP,0.0
+core_positive_only,只保留核心和次级正贡献因子,LP,0.75
+core_positive_only,只保留核心和次级正贡献因子,EGRO,0.0
+core_positive_only,只保留核心和次级正贡献因子,SGRO,0.0
+core_positive_only,只保留核心和次级正贡献因子,MLEV,0.0
+core_positive_only,只保留核心和次级正贡献因子,BLEV,0.0
+core_positive_only,只保留核心和次级正贡献因子,LIQUIDITY,1.0
+core_positive_only,只保留核心和次级正贡献因子,STOM,0.0
+core_positive_only,只保留核心和次级正贡献因子,STOQ,0.0
+core_positive_only,只保留核心和次级正贡献因子,ROE,0.75
+core_positive_only,只保留核心和次级正贡献因子,ROA,0.0
+core_positive_only,只保留核心和次级正贡献因子,CAPX,1.0
+core_positive_only,只保留核心和次级正贡献因子,AGRO,0.0
+core_positive_only,只保留核心和次级正贡献因子,TOPSI,0.0
+core_positive_only,只保留核心和次级正贡献因子,SEASON,0.75
+drop_one_SIZE,只剔除 SIZE,SIZE,0.0
+drop_one_SIZE,只剔除 SIZE,MIDCAP,1.0
+drop_one_SIZE,只剔除 SIZE,BETA,1.0
+drop_one_SIZE,只剔除 SIZE,RESVOL,1.0
+drop_one_SIZE,只剔除 SIZE,HISTVOL,1.0
+drop_one_SIZE,只剔除 SIZE,MOMENTUM,1.0
+drop_one_SIZE,只剔除 SIZE,RESMOM,1.0
+drop_one_SIZE,只剔除 SIZE,BTOP,1.0
+drop_one_SIZE,只剔除 SIZE,EYIELD,1.0
+drop_one_SIZE,只剔除 SIZE,CFP,1.0
+drop_one_SIZE,只剔除 SIZE,SP,1.0
+drop_one_SIZE,只剔除 SIZE,LP,1.0
+drop_one_SIZE,只剔除 SIZE,EGRO,1.0
+drop_one_SIZE,只剔除 SIZE,SGRO,1.0
+drop_one_SIZE,只剔除 SIZE,MLEV,1.0
+drop_one_SIZE,只剔除 SIZE,BLEV,1.0
+drop_one_SIZE,只剔除 SIZE,LIQUIDITY,1.0
+drop_one_SIZE,只剔除 SIZE,STOM,1.0
+drop_one_SIZE,只剔除 SIZE,STOQ,1.0
+drop_one_SIZE,只剔除 SIZE,ROE,1.0
+drop_one_SIZE,只剔除 SIZE,ROA,1.0
+drop_one_SIZE,只剔除 SIZE,CAPX,1.0
+drop_one_SIZE,只剔除 SIZE,AGRO,1.0
+drop_one_SIZE,只剔除 SIZE,TOPSI,1.0
+drop_one_SIZE,只剔除 SIZE,SEASON,1.0
+drop_one_MIDCAP,只剔除 MIDCAP,SIZE,1.0
+drop_one_MIDCAP,只剔除 MIDCAP,MIDCAP,0.0
+drop_one_MIDCAP,只剔除 MIDCAP,BETA,1.0
+drop_one_MIDCAP,只剔除 MIDCAP,RESVOL,1.0
+drop_one_MIDCAP,只剔除 MIDCAP,HISTVOL,1.0
+drop_one_MIDCAP,只剔除 MIDCAP,MOMENTUM,1.0
+drop_one_MIDCAP,只剔除 MIDCAP,RESMOM,1.0
+drop_one_MIDCAP,只剔除 MIDCAP,BTOP,1.0
+drop_one_MIDCAP,只剔除 MIDCAP,EYIELD,1.0
+drop_one_MIDCAP,只剔除 MIDCAP,CFP,1.0
+drop_one_MIDCAP,只剔除 MIDCAP,SP,1.0
+drop_one_MIDCAP,只剔除 MIDCAP,LP,1.0
+drop_one_MIDCAP,只剔除 MIDCAP,EGRO,1.0
+drop_one_MIDCAP,只剔除 MIDCAP,SGRO,1.0
+drop_one_MIDCAP,只剔除 MIDCAP,MLEV,1.0
+drop_one_MIDCAP,只剔除 MIDCAP,BLEV,1.0
+drop_one_MIDCAP,只剔除 MIDCAP,LIQUIDITY,1.0
+drop_one_MIDCAP,只剔除 MIDCAP,STOM,1.0
+drop_one_MIDCAP,只剔除 MIDCAP,STOQ,1.0
+drop_one_MIDCAP,只剔除 MIDCAP,ROE,1.0
+drop_one_MIDCAP,只剔除 MIDCAP,ROA,1.0
+drop_one_MIDCAP,只剔除 MIDCAP,CAPX,1.0
+drop_one_MIDCAP,只剔除 MIDCAP,AGRO,1.0
+drop_one_MIDCAP,只剔除 MIDCAP,TOPSI,1.0
+drop_one_MIDCAP,只剔除 MIDCAP,SEASON,1.0
+drop_one_BETA,只剔除 BETA,SIZE,1.0
+drop_one_BETA,只剔除 BETA,MIDCAP,1.0
+drop_one_BETA,只剔除 BETA,BETA,0.0
+drop_one_BETA,只剔除 BETA,RESVOL,1.0
+drop_one_BETA,只剔除 BETA,HISTVOL,1.0
+drop_one_BETA,只剔除 BETA,MOMENTUM,1.0
+drop_one_BETA,只剔除 BETA,RESMOM,1.0
+drop_one_BETA,只剔除 BETA,BTOP,1.0
+drop_one_BETA,只剔除 BETA,EYIELD,1.0
+drop_one_BETA,只剔除 BETA,CFP,1.0
+drop_one_BETA,只剔除 BETA,SP,1.0
+drop_one_BETA,只剔除 BETA,LP,1.0
+drop_one_BETA,只剔除 BETA,EGRO,1.0
+drop_one_BETA,只剔除 BETA,SGRO,1.0
+drop_one_BETA,只剔除 BETA,MLEV,1.0
+drop_one_BETA,只剔除 BETA,BLEV,1.0
+drop_one_BETA,只剔除 BETA,LIQUIDITY,1.0
+drop_one_BETA,只剔除 BETA,STOM,1.0
+drop_one_BETA,只剔除 BETA,STOQ,1.0
+drop_one_BETA,只剔除 BETA,ROE,1.0
+drop_one_BETA,只剔除 BETA,ROA,1.0
+drop_one_BETA,只剔除 BETA,CAPX,1.0
+drop_one_BETA,只剔除 BETA,AGRO,1.0
+drop_one_BETA,只剔除 BETA,TOPSI,1.0
+drop_one_BETA,只剔除 BETA,SEASON,1.0
+drop_one_RESVOL,只剔除 RESVOL,SIZE,1.0
+drop_one_RESVOL,只剔除 RESVOL,MIDCAP,1.0
+drop_one_RESVOL,只剔除 RESVOL,BETA,1.0
+drop_one_RESVOL,只剔除 RESVOL,RESVOL,0.0
+drop_one_RESVOL,只剔除 RESVOL,HISTVOL,1.0
+drop_one_RESVOL,只剔除 RESVOL,MOMENTUM,1.0
+drop_one_RESVOL,只剔除 RESVOL,RESMOM,1.0
+drop_one_RESVOL,只剔除 RESVOL,BTOP,1.0
+drop_one_RESVOL,只剔除 RESVOL,EYIELD,1.0
+drop_one_RESVOL,只剔除 RESVOL,CFP,1.0
+drop_one_RESVOL,只剔除 RESVOL,SP,1.0
+drop_one_RESVOL,只剔除 RESVOL,LP,1.0
+drop_one_RESVOL,只剔除 RESVOL,EGRO,1.0
+drop_one_RESVOL,只剔除 RESVOL,SGRO,1.0
+drop_one_RESVOL,只剔除 RESVOL,MLEV,1.0
+drop_one_RESVOL,只剔除 RESVOL,BLEV,1.0
+drop_one_RESVOL,只剔除 RESVOL,LIQUIDITY,1.0
+drop_one_RESVOL,只剔除 RESVOL,STOM,1.0
+drop_one_RESVOL,只剔除 RESVOL,STOQ,1.0
+drop_one_RESVOL,只剔除 RESVOL,ROE,1.0
+drop_one_RESVOL,只剔除 RESVOL,ROA,1.0
+drop_one_RESVOL,只剔除 RESVOL,CAPX,1.0
+drop_one_RESVOL,只剔除 RESVOL,AGRO,1.0
+drop_one_RESVOL,只剔除 RESVOL,TOPSI,1.0
+drop_one_RESVOL,只剔除 RESVOL,SEASON,1.0
+drop_one_HISTVOL,只剔除 HISTVOL,SIZE,1.0
+drop_one_HISTVOL,只剔除 HISTVOL,MIDCAP,1.0
+drop_one_HISTVOL,只剔除 HISTVOL,BETA,1.0
+drop_one_HISTVOL,只剔除 HISTVOL,RESVOL,1.0
+drop_one_HISTVOL,只剔除 HISTVOL,HISTVOL,0.0
+drop_one_HISTVOL,只剔除 HISTVOL,MOMENTUM,1.0
+drop_one_HISTVOL,只剔除 HISTVOL,RESMOM,1.0
+drop_one_HISTVOL,只剔除 HISTVOL,BTOP,1.0
+drop_one_HISTVOL,只剔除 HISTVOL,EYIELD,1.0
+drop_one_HISTVOL,只剔除 HISTVOL,CFP,1.0
+drop_one_HISTVOL,只剔除 HISTVOL,SP,1.0
+drop_one_HISTVOL,只剔除 HISTVOL,LP,1.0
+drop_one_HISTVOL,只剔除 HISTVOL,EGRO,1.0
+drop_one_HISTVOL,只剔除 HISTVOL,SGRO,1.0
+drop_one_HISTVOL,只剔除 HISTVOL,MLEV,1.0
+drop_one_HISTVOL,只剔除 HISTVOL,BLEV,1.0
+drop_one_HISTVOL,只剔除 HISTVOL,LIQUIDITY,1.0
+drop_one_HISTVOL,只剔除 HISTVOL,STOM,1.0
+drop_one_HISTVOL,只剔除 HISTVOL,STOQ,1.0
+drop_one_HISTVOL,只剔除 HISTVOL,ROE,1.0
+drop_one_HISTVOL,只剔除 HISTVOL,ROA,1.0
+drop_one_HISTVOL,只剔除 HISTVOL,CAPX,1.0
+drop_one_HISTVOL,只剔除 HISTVOL,AGRO,1.0
+drop_one_HISTVOL,只剔除 HISTVOL,TOPSI,1.0
+drop_one_HISTVOL,只剔除 HISTVOL,SEASON,1.0
+drop_one_MOMENTUM,只剔除 MOMENTUM,SIZE,1.0
+drop_one_MOMENTUM,只剔除 MOMENTUM,MIDCAP,1.0
+drop_one_MOMENTUM,只剔除 MOMENTUM,BETA,1.0
+drop_one_MOMENTUM,只剔除 MOMENTUM,RESVOL,1.0
+drop_one_MOMENTUM,只剔除 MOMENTUM,HISTVOL,1.0
+drop_one_MOMENTUM,只剔除 MOMENTUM,MOMENTUM,0.0
+drop_one_MOMENTUM,只剔除 MOMENTUM,RESMOM,1.0
+drop_one_MOMENTUM,只剔除 MOMENTUM,BTOP,1.0
+drop_one_MOMENTUM,只剔除 MOMENTUM,EYIELD,1.0
+drop_one_MOMENTUM,只剔除 MOMENTUM,CFP,1.0
+drop_one_MOMENTUM,只剔除 MOMENTUM,SP,1.0
+drop_one_MOMENTUM,只剔除 MOMENTUM,LP,1.0
+drop_one_MOMENTUM,只剔除 MOMENTUM,EGRO,1.0
+drop_one_MOMENTUM,只剔除 MOMENTUM,SGRO,1.0
+drop_one_MOMENTUM,只剔除 MOMENTUM,MLEV,1.0
+drop_one_MOMENTUM,只剔除 MOMENTUM,BLEV,1.0
+drop_one_MOMENTUM,只剔除 MOMENTUM,LIQUIDITY,1.0
+drop_one_MOMENTUM,只剔除 MOMENTUM,STOM,1.0
+drop_one_MOMENTUM,只剔除 MOMENTUM,STOQ,1.0
+drop_one_MOMENTUM,只剔除 MOMENTUM,ROE,1.0
+drop_one_MOMENTUM,只剔除 MOMENTUM,ROA,1.0
+drop_one_MOMENTUM,只剔除 MOMENTUM,CAPX,1.0
+drop_one_MOMENTUM,只剔除 MOMENTUM,AGRO,1.0
+drop_one_MOMENTUM,只剔除 MOMENTUM,TOPSI,1.0
+drop_one_MOMENTUM,只剔除 MOMENTUM,SEASON,1.0
+drop_one_RESMOM,只剔除 RESMOM,SIZE,1.0
+drop_one_RESMOM,只剔除 RESMOM,MIDCAP,1.0
+drop_one_RESMOM,只剔除 RESMOM,BETA,1.0
+drop_one_RESMOM,只剔除 RESMOM,RESVOL,1.0
+drop_one_RESMOM,只剔除 RESMOM,HISTVOL,1.0
+drop_one_RESMOM,只剔除 RESMOM,MOMENTUM,1.0
+drop_one_RESMOM,只剔除 RESMOM,RESMOM,0.0
+drop_one_RESMOM,只剔除 RESMOM,BTOP,1.0
+drop_one_RESMOM,只剔除 RESMOM,EYIELD,1.0
+drop_one_RESMOM,只剔除 RESMOM,CFP,1.0
+drop_one_RESMOM,只剔除 RESMOM,SP,1.0
+drop_one_RESMOM,只剔除 RESMOM,LP,1.0
+drop_one_RESMOM,只剔除 RESMOM,EGRO,1.0
+drop_one_RESMOM,只剔除 RESMOM,SGRO,1.0
+drop_one_RESMOM,只剔除 RESMOM,MLEV,1.0
+drop_one_RESMOM,只剔除 RESMOM,BLEV,1.0
+drop_one_RESMOM,只剔除 RESMOM,LIQUIDITY,1.0
+drop_one_RESMOM,只剔除 RESMOM,STOM,1.0
+drop_one_RESMOM,只剔除 RESMOM,STOQ,1.0
+drop_one_RESMOM,只剔除 RESMOM,ROE,1.0
+drop_one_RESMOM,只剔除 RESMOM,ROA,1.0
+drop_one_RESMOM,只剔除 RESMOM,CAPX,1.0
+drop_one_RESMOM,只剔除 RESMOM,AGRO,1.0
+drop_one_RESMOM,只剔除 RESMOM,TOPSI,1.0
+drop_one_RESMOM,只剔除 RESMOM,SEASON,1.0
+drop_one_BTOP,只剔除 BTOP,SIZE,1.0
+drop_one_BTOP,只剔除 BTOP,MIDCAP,1.0
+drop_one_BTOP,只剔除 BTOP,BETA,1.0
+drop_one_BTOP,只剔除 BTOP,RESVOL,1.0
+drop_one_BTOP,只剔除 BTOP,HISTVOL,1.0
+drop_one_BTOP,只剔除 BTOP,MOMENTUM,1.0
+drop_one_BTOP,只剔除 BTOP,RESMOM,1.0
+drop_one_BTOP,只剔除 BTOP,BTOP,0.0
+drop_one_BTOP,只剔除 BTOP,EYIELD,1.0
+drop_one_BTOP,只剔除 BTOP,CFP,1.0
+drop_one_BTOP,只剔除 BTOP,SP,1.0
+drop_one_BTOP,只剔除 BTOP,LP,1.0
+drop_one_BTOP,只剔除 BTOP,EGRO,1.0
+drop_one_BTOP,只剔除 BTOP,SGRO,1.0
+drop_one_BTOP,只剔除 BTOP,MLEV,1.0
+drop_one_BTOP,只剔除 BTOP,BLEV,1.0
+drop_one_BTOP,只剔除 BTOP,LIQUIDITY,1.0
+drop_one_BTOP,只剔除 BTOP,STOM,1.0
+drop_one_BTOP,只剔除 BTOP,STOQ,1.0
+drop_one_BTOP,只剔除 BTOP,ROE,1.0
+drop_one_BTOP,只剔除 BTOP,ROA,1.0
+drop_one_BTOP,只剔除 BTOP,CAPX,1.0
+drop_one_BTOP,只剔除 BTOP,AGRO,1.0
+drop_one_BTOP,只剔除 BTOP,TOPSI,1.0
+drop_one_BTOP,只剔除 BTOP,SEASON,1.0
+drop_one_EYIELD,只剔除 EYIELD,SIZE,1.0
+drop_one_EYIELD,只剔除 EYIELD,MIDCAP,1.0
+drop_one_EYIELD,只剔除 EYIELD,BETA,1.0
+drop_one_EYIELD,只剔除 EYIELD,RESVOL,1.0
+drop_one_EYIELD,只剔除 EYIELD,HISTVOL,1.0
+drop_one_EYIELD,只剔除 EYIELD,MOMENTUM,1.0
+drop_one_EYIELD,只剔除 EYIELD,RESMOM,1.0
+drop_one_EYIELD,只剔除 EYIELD,BTOP,1.0
+drop_one_EYIELD,只剔除 EYIELD,EYIELD,0.0
+drop_one_EYIELD,只剔除 EYIELD,CFP,1.0
+drop_one_EYIELD,只剔除 EYIELD,SP,1.0
+drop_one_EYIELD,只剔除 EYIELD,LP,1.0
+drop_one_EYIELD,只剔除 EYIELD,EGRO,1.0
+drop_one_EYIELD,只剔除 EYIELD,SGRO,1.0
+drop_one_EYIELD,只剔除 EYIELD,MLEV,1.0
+drop_one_EYIELD,只剔除 EYIELD,BLEV,1.0
+drop_one_EYIELD,只剔除 EYIELD,LIQUIDITY,1.0
+drop_one_EYIELD,只剔除 EYIELD,STOM,1.0
+drop_one_EYIELD,只剔除 EYIELD,STOQ,1.0
+drop_one_EYIELD,只剔除 EYIELD,ROE,1.0
+drop_one_EYIELD,只剔除 EYIELD,ROA,1.0
+drop_one_EYIELD,只剔除 EYIELD,CAPX,1.0
+drop_one_EYIELD,只剔除 EYIELD,AGRO,1.0
+drop_one_EYIELD,只剔除 EYIELD,TOPSI,1.0
+drop_one_EYIELD,只剔除 EYIELD,SEASON,1.0
+drop_one_CFP,只剔除 CFP,SIZE,1.0
+drop_one_CFP,只剔除 CFP,MIDCAP,1.0
+drop_one_CFP,只剔除 CFP,BETA,1.0
+drop_one_CFP,只剔除 CFP,RESVOL,1.0
+drop_one_CFP,只剔除 CFP,HISTVOL,1.0
+drop_one_CFP,只剔除 CFP,MOMENTUM,1.0
+drop_one_CFP,只剔除 CFP,RESMOM,1.0
+drop_one_CFP,只剔除 CFP,BTOP,1.0
+drop_one_CFP,只剔除 CFP,EYIELD,1.0
+drop_one_CFP,只剔除 CFP,CFP,0.0
+drop_one_CFP,只剔除 CFP,SP,1.0
+drop_one_CFP,只剔除 CFP,LP,1.0
+drop_one_CFP,只剔除 CFP,EGRO,1.0
+drop_one_CFP,只剔除 CFP,SGRO,1.0
+drop_one_CFP,只剔除 CFP,MLEV,1.0
+drop_one_CFP,只剔除 CFP,BLEV,1.0
+drop_one_CFP,只剔除 CFP,LIQUIDITY,1.0
+drop_one_CFP,只剔除 CFP,STOM,1.0
+drop_one_CFP,只剔除 CFP,STOQ,1.0
+drop_one_CFP,只剔除 CFP,ROE,1.0
+drop_one_CFP,只剔除 CFP,ROA,1.0
+drop_one_CFP,只剔除 CFP,CAPX,1.0
+drop_one_CFP,只剔除 CFP,AGRO,1.0
+drop_one_CFP,只剔除 CFP,TOPSI,1.0
+drop_one_CFP,只剔除 CFP,SEASON,1.0
+drop_one_SP,只剔除 SP,SIZE,1.0
+drop_one_SP,只剔除 SP,MIDCAP,1.0
+drop_one_SP,只剔除 SP,BETA,1.0
+drop_one_SP,只剔除 SP,RESVOL,1.0
+drop_one_SP,只剔除 SP,HISTVOL,1.0
+drop_one_SP,只剔除 SP,MOMENTUM,1.0
+drop_one_SP,只剔除 SP,RESMOM,1.0
+drop_one_SP,只剔除 SP,BTOP,1.0
+drop_one_SP,只剔除 SP,EYIELD,1.0
+drop_one_SP,只剔除 SP,CFP,1.0
+drop_one_SP,只剔除 SP,SP,0.0
+drop_one_SP,只剔除 SP,LP,1.0
+drop_one_SP,只剔除 SP,EGRO,1.0
+drop_one_SP,只剔除 SP,SGRO,1.0
+drop_one_SP,只剔除 SP,MLEV,1.0
+drop_one_SP,只剔除 SP,BLEV,1.0
+drop_one_SP,只剔除 SP,LIQUIDITY,1.0
+drop_one_SP,只剔除 SP,STOM,1.0
+drop_one_SP,只剔除 SP,STOQ,1.0
+drop_one_SP,只剔除 SP,ROE,1.0
+drop_one_SP,只剔除 SP,ROA,1.0
+drop_one_SP,只剔除 SP,CAPX,1.0
+drop_one_SP,只剔除 SP,AGRO,1.0
+drop_one_SP,只剔除 SP,TOPSI,1.0
+drop_one_SP,只剔除 SP,SEASON,1.0
+drop_one_LP,只剔除 LP,SIZE,1.0
+drop_one_LP,只剔除 LP,MIDCAP,1.0
+drop_one_LP,只剔除 LP,BETA,1.0
+drop_one_LP,只剔除 LP,RESVOL,1.0
+drop_one_LP,只剔除 LP,HISTVOL,1.0
+drop_one_LP,只剔除 LP,MOMENTUM,1.0
+drop_one_LP,只剔除 LP,RESMOM,1.0
+drop_one_LP,只剔除 LP,BTOP,1.0
+drop_one_LP,只剔除 LP,EYIELD,1.0
+drop_one_LP,只剔除 LP,CFP,1.0
+drop_one_LP,只剔除 LP,SP,1.0
+drop_one_LP,只剔除 LP,LP,0.0
+drop_one_LP,只剔除 LP,EGRO,1.0
+drop_one_LP,只剔除 LP,SGRO,1.0
+drop_one_LP,只剔除 LP,MLEV,1.0
+drop_one_LP,只剔除 LP,BLEV,1.0
+drop_one_LP,只剔除 LP,LIQUIDITY,1.0
+drop_one_LP,只剔除 LP,STOM,1.0
+drop_one_LP,只剔除 LP,STOQ,1.0
+drop_one_LP,只剔除 LP,ROE,1.0
+drop_one_LP,只剔除 LP,ROA,1.0
+drop_one_LP,只剔除 LP,CAPX,1.0
+drop_one_LP,只剔除 LP,AGRO,1.0
+drop_one_LP,只剔除 LP,TOPSI,1.0
+drop_one_LP,只剔除 LP,SEASON,1.0
+drop_one_EGRO,只剔除 EGRO,SIZE,1.0
+drop_one_EGRO,只剔除 EGRO,MIDCAP,1.0
+drop_one_EGRO,只剔除 EGRO,BETA,1.0
+drop_one_EGRO,只剔除 EGRO,RESVOL,1.0
+drop_one_EGRO,只剔除 EGRO,HISTVOL,1.0
+drop_one_EGRO,只剔除 EGRO,MOMENTUM,1.0
+drop_one_EGRO,只剔除 EGRO,RESMOM,1.0
+drop_one_EGRO,只剔除 EGRO,BTOP,1.0
+drop_one_EGRO,只剔除 EGRO,EYIELD,1.0
+drop_one_EGRO,只剔除 EGRO,CFP,1.0
+drop_one_EGRO,只剔除 EGRO,SP,1.0
+drop_one_EGRO,只剔除 EGRO,LP,1.0
+drop_one_EGRO,只剔除 EGRO,EGRO,0.0
+drop_one_EGRO,只剔除 EGRO,SGRO,1.0
+drop_one_EGRO,只剔除 EGRO,MLEV,1.0
+drop_one_EGRO,只剔除 EGRO,BLEV,1.0
+drop_one_EGRO,只剔除 EGRO,LIQUIDITY,1.0
+drop_one_EGRO,只剔除 EGRO,STOM,1.0
+drop_one_EGRO,只剔除 EGRO,STOQ,1.0
+drop_one_EGRO,只剔除 EGRO,ROE,1.0
+drop_one_EGRO,只剔除 EGRO,ROA,1.0
+drop_one_EGRO,只剔除 EGRO,CAPX,1.0
+drop_one_EGRO,只剔除 EGRO,AGRO,1.0
+drop_one_EGRO,只剔除 EGRO,TOPSI,1.0
+drop_one_EGRO,只剔除 EGRO,SEASON,1.0
+drop_one_SGRO,只剔除 SGRO,SIZE,1.0
+drop_one_SGRO,只剔除 SGRO,MIDCAP,1.0
+drop_one_SGRO,只剔除 SGRO,BETA,1.0
+drop_one_SGRO,只剔除 SGRO,RESVOL,1.0
+drop_one_SGRO,只剔除 SGRO,HISTVOL,1.0
+drop_one_SGRO,只剔除 SGRO,MOMENTUM,1.0
+drop_one_SGRO,只剔除 SGRO,RESMOM,1.0
+drop_one_SGRO,只剔除 SGRO,BTOP,1.0
+drop_one_SGRO,只剔除 SGRO,EYIELD,1.0
+drop_one_SGRO,只剔除 SGRO,CFP,1.0
+drop_one_SGRO,只剔除 SGRO,SP,1.0
+drop_one_SGRO,只剔除 SGRO,LP,1.0
+drop_one_SGRO,只剔除 SGRO,EGRO,1.0
+drop_one_SGRO,只剔除 SGRO,SGRO,0.0
+drop_one_SGRO,只剔除 SGRO,MLEV,1.0
+drop_one_SGRO,只剔除 SGRO,BLEV,1.0
+drop_one_SGRO,只剔除 SGRO,LIQUIDITY,1.0
+drop_one_SGRO,只剔除 SGRO,STOM,1.0
+drop_one_SGRO,只剔除 SGRO,STOQ,1.0
+drop_one_SGRO,只剔除 SGRO,ROE,1.0
+drop_one_SGRO,只剔除 SGRO,ROA,1.0
+drop_one_SGRO,只剔除 SGRO,CAPX,1.0
+drop_one_SGRO,只剔除 SGRO,AGRO,1.0
+drop_one_SGRO,只剔除 SGRO,TOPSI,1.0
+drop_one_SGRO,只剔除 SGRO,SEASON,1.0
+drop_one_MLEV,只剔除 MLEV,SIZE,1.0
+drop_one_MLEV,只剔除 MLEV,MIDCAP,1.0
+drop_one_MLEV,只剔除 MLEV,BETA,1.0
+drop_one_MLEV,只剔除 MLEV,RESVOL,1.0
+drop_one_MLEV,只剔除 MLEV,HISTVOL,1.0
+drop_one_MLEV,只剔除 MLEV,MOMENTUM,1.0
+drop_one_MLEV,只剔除 MLEV,RESMOM,1.0
+drop_one_MLEV,只剔除 MLEV,BTOP,1.0
+drop_one_MLEV,只剔除 MLEV,EYIELD,1.0
+drop_one_MLEV,只剔除 MLEV,CFP,1.0
+drop_one_MLEV,只剔除 MLEV,SP,1.0
+drop_one_MLEV,只剔除 MLEV,LP,1.0
+drop_one_MLEV,只剔除 MLEV,EGRO,1.0
+drop_one_MLEV,只剔除 MLEV,SGRO,1.0
+drop_one_MLEV,只剔除 MLEV,MLEV,0.0
+drop_one_MLEV,只剔除 MLEV,BLEV,1.0
+drop_one_MLEV,只剔除 MLEV,LIQUIDITY,1.0
+drop_one_MLEV,只剔除 MLEV,STOM,1.0
+drop_one_MLEV,只剔除 MLEV,STOQ,1.0
+drop_one_MLEV,只剔除 MLEV,ROE,1.0
+drop_one_MLEV,只剔除 MLEV,ROA,1.0
+drop_one_MLEV,只剔除 MLEV,CAPX,1.0
+drop_one_MLEV,只剔除 MLEV,AGRO,1.0
+drop_one_MLEV,只剔除 MLEV,TOPSI,1.0
+drop_one_MLEV,只剔除 MLEV,SEASON,1.0
+drop_one_BLEV,只剔除 BLEV,SIZE,1.0
+drop_one_BLEV,只剔除 BLEV,MIDCAP,1.0
+drop_one_BLEV,只剔除 BLEV,BETA,1.0
+drop_one_BLEV,只剔除 BLEV,RESVOL,1.0
+drop_one_BLEV,只剔除 BLEV,HISTVOL,1.0
+drop_one_BLEV,只剔除 BLEV,MOMENTUM,1.0
+drop_one_BLEV,只剔除 BLEV,RESMOM,1.0
+drop_one_BLEV,只剔除 BLEV,BTOP,1.0
+drop_one_BLEV,只剔除 BLEV,EYIELD,1.0
+drop_one_BLEV,只剔除 BLEV,CFP,1.0
+drop_one_BLEV,只剔除 BLEV,SP,1.0
+drop_one_BLEV,只剔除 BLEV,LP,1.0
+drop_one_BLEV,只剔除 BLEV,EGRO,1.0
+drop_one_BLEV,只剔除 BLEV,SGRO,1.0
+drop_one_BLEV,只剔除 BLEV,MLEV,1.0
+drop_one_BLEV,只剔除 BLEV,BLEV,0.0
+drop_one_BLEV,只剔除 BLEV,LIQUIDITY,1.0
+drop_one_BLEV,只剔除 BLEV,STOM,1.0
+drop_one_BLEV,只剔除 BLEV,STOQ,1.0
+drop_one_BLEV,只剔除 BLEV,ROE,1.0
+drop_one_BLEV,只剔除 BLEV,ROA,1.0
+drop_one_BLEV,只剔除 BLEV,CAPX,1.0
+drop_one_BLEV,只剔除 BLEV,AGRO,1.0
+drop_one_BLEV,只剔除 BLEV,TOPSI,1.0
+drop_one_BLEV,只剔除 BLEV,SEASON,1.0
+drop_one_LIQUIDITY,只剔除 LIQUIDITY,SIZE,1.0
+drop_one_LIQUIDITY,只剔除 LIQUIDITY,MIDCAP,1.0
+drop_one_LIQUIDITY,只剔除 LIQUIDITY,BETA,1.0
+drop_one_LIQUIDITY,只剔除 LIQUIDITY,RESVOL,1.0
+drop_one_LIQUIDITY,只剔除 LIQUIDITY,HISTVOL,1.0
+drop_one_LIQUIDITY,只剔除 LIQUIDITY,MOMENTUM,1.0
+drop_one_LIQUIDITY,只剔除 LIQUIDITY,RESMOM,1.0
+drop_one_LIQUIDITY,只剔除 LIQUIDITY,BTOP,1.0
+drop_one_LIQUIDITY,只剔除 LIQUIDITY,EYIELD,1.0
+drop_one_LIQUIDITY,只剔除 LIQUIDITY,CFP,1.0
+drop_one_LIQUIDITY,只剔除 LIQUIDITY,SP,1.0
+drop_one_LIQUIDITY,只剔除 LIQUIDITY,LP,1.0
+drop_one_LIQUIDITY,只剔除 LIQUIDITY,EGRO,1.0
+drop_one_LIQUIDITY,只剔除 LIQUIDITY,SGRO,1.0
+drop_one_LIQUIDITY,只剔除 LIQUIDITY,MLEV,1.0
+drop_one_LIQUIDITY,只剔除 LIQUIDITY,BLEV,1.0
+drop_one_LIQUIDITY,只剔除 LIQUIDITY,LIQUIDITY,0.0
+drop_one_LIQUIDITY,只剔除 LIQUIDITY,STOM,1.0
+drop_one_LIQUIDITY,只剔除 LIQUIDITY,STOQ,1.0
+drop_one_LIQUIDITY,只剔除 LIQUIDITY,ROE,1.0
+drop_one_LIQUIDITY,只剔除 LIQUIDITY,ROA,1.0
+drop_one_LIQUIDITY,只剔除 LIQUIDITY,CAPX,1.0
+drop_one_LIQUIDITY,只剔除 LIQUIDITY,AGRO,1.0
+drop_one_LIQUIDITY,只剔除 LIQUIDITY,TOPSI,1.0
+drop_one_LIQUIDITY,只剔除 LIQUIDITY,SEASON,1.0
+drop_one_STOM,只剔除 STOM,SIZE,1.0
+drop_one_STOM,只剔除 STOM,MIDCAP,1.0
+drop_one_STOM,只剔除 STOM,BETA,1.0
+drop_one_STOM,只剔除 STOM,RESVOL,1.0
+drop_one_STOM,只剔除 STOM,HISTVOL,1.0
+drop_one_STOM,只剔除 STOM,MOMENTUM,1.0
+drop_one_STOM,只剔除 STOM,RESMOM,1.0
+drop_one_STOM,只剔除 STOM,BTOP,1.0
+drop_one_STOM,只剔除 STOM,EYIELD,1.0
+drop_one_STOM,只剔除 STOM,CFP,1.0
+drop_one_STOM,只剔除 STOM,SP,1.0
+drop_one_STOM,只剔除 STOM,LP,1.0
+drop_one_STOM,只剔除 STOM,EGRO,1.0
+drop_one_STOM,只剔除 STOM,SGRO,1.0
+drop_one_STOM,只剔除 STOM,MLEV,1.0
+drop_one_STOM,只剔除 STOM,BLEV,1.0
+drop_one_STOM,只剔除 STOM,LIQUIDITY,1.0
+drop_one_STOM,只剔除 STOM,STOM,0.0
+drop_one_STOM,只剔除 STOM,STOQ,1.0
+drop_one_STOM,只剔除 STOM,ROE,1.0
+drop_one_STOM,只剔除 STOM,ROA,1.0
+drop_one_STOM,只剔除 STOM,CAPX,1.0
+drop_one_STOM,只剔除 STOM,AGRO,1.0
+drop_one_STOM,只剔除 STOM,TOPSI,1.0
+drop_one_STOM,只剔除 STOM,SEASON,1.0
+drop_one_STOQ,只剔除 STOQ,SIZE,1.0
+drop_one_STOQ,只剔除 STOQ,MIDCAP,1.0
+drop_one_STOQ,只剔除 STOQ,BETA,1.0
+drop_one_STOQ,只剔除 STOQ,RESVOL,1.0
+drop_one_STOQ,只剔除 STOQ,HISTVOL,1.0
+drop_one_STOQ,只剔除 STOQ,MOMENTUM,1.0
+drop_one_STOQ,只剔除 STOQ,RESMOM,1.0
+drop_one_STOQ,只剔除 STOQ,BTOP,1.0
+drop_one_STOQ,只剔除 STOQ,EYIELD,1.0
+drop_one_STOQ,只剔除 STOQ,CFP,1.0
+drop_one_STOQ,只剔除 STOQ,SP,1.0
+drop_one_STOQ,只剔除 STOQ,LP,1.0
+drop_one_STOQ,只剔除 STOQ,EGRO,1.0
+drop_one_STOQ,只剔除 STOQ,SGRO,1.0
+drop_one_STOQ,只剔除 STOQ,MLEV,1.0
+drop_one_STOQ,只剔除 STOQ,BLEV,1.0
+drop_one_STOQ,只剔除 STOQ,LIQUIDITY,1.0
+drop_one_STOQ,只剔除 STOQ,STOM,1.0
+drop_one_STOQ,只剔除 STOQ,STOQ,0.0
+drop_one_STOQ,只剔除 STOQ,ROE,1.0
+drop_one_STOQ,只剔除 STOQ,ROA,1.0
+drop_one_STOQ,只剔除 STOQ,CAPX,1.0
+drop_one_STOQ,只剔除 STOQ,AGRO,1.0
+drop_one_STOQ,只剔除 STOQ,TOPSI,1.0
+drop_one_STOQ,只剔除 STOQ,SEASON,1.0
+drop_one_ROE,只剔除 ROE,SIZE,1.0
+drop_one_ROE,只剔除 ROE,MIDCAP,1.0
+drop_one_ROE,只剔除 ROE,BETA,1.0
+drop_one_ROE,只剔除 ROE,RESVOL,1.0
+drop_one_ROE,只剔除 ROE,HISTVOL,1.0
+drop_one_ROE,只剔除 ROE,MOMENTUM,1.0
+drop_one_ROE,只剔除 ROE,RESMOM,1.0
+drop_one_ROE,只剔除 ROE,BTOP,1.0
+drop_one_ROE,只剔除 ROE,EYIELD,1.0
+drop_one_ROE,只剔除 ROE,CFP,1.0
+drop_one_ROE,只剔除 ROE,SP,1.0
+drop_one_ROE,只剔除 ROE,LP,1.0
+drop_one_ROE,只剔除 ROE,EGRO,1.0
+drop_one_ROE,只剔除 ROE,SGRO,1.0
+drop_one_ROE,只剔除 ROE,MLEV,1.0
+drop_one_ROE,只剔除 ROE,BLEV,1.0
+drop_one_ROE,只剔除 ROE,LIQUIDITY,1.0
+drop_one_ROE,只剔除 ROE,STOM,1.0
+drop_one_ROE,只剔除 ROE,STOQ,1.0
+drop_one_ROE,只剔除 ROE,ROE,0.0
+drop_one_ROE,只剔除 ROE,ROA,1.0
+drop_one_ROE,只剔除 ROE,CAPX,1.0
+drop_one_ROE,只剔除 ROE,AGRO,1.0
+drop_one_ROE,只剔除 ROE,TOPSI,1.0
+drop_one_ROE,只剔除 ROE,SEASON,1.0
+drop_one_ROA,只剔除 ROA,SIZE,1.0
+drop_one_ROA,只剔除 ROA,MIDCAP,1.0
+drop_one_ROA,只剔除 ROA,BETA,1.0
+drop_one_ROA,只剔除 ROA,RESVOL,1.0
+drop_one_ROA,只剔除 ROA,HISTVOL,1.0
+drop_one_ROA,只剔除 ROA,MOMENTUM,1.0
+drop_one_ROA,只剔除 ROA,RESMOM,1.0
+drop_one_ROA,只剔除 ROA,BTOP,1.0
+drop_one_ROA,只剔除 ROA,EYIELD,1.0
+drop_one_ROA,只剔除 ROA,CFP,1.0
+drop_one_ROA,只剔除 ROA,SP,1.0
+drop_one_ROA,只剔除 ROA,LP,1.0
+drop_one_ROA,只剔除 ROA,EGRO,1.0
+drop_one_ROA,只剔除 ROA,SGRO,1.0
+drop_one_ROA,只剔除 ROA,MLEV,1.0
+drop_one_ROA,只剔除 ROA,BLEV,1.0
+drop_one_ROA,只剔除 ROA,LIQUIDITY,1.0
+drop_one_ROA,只剔除 ROA,STOM,1.0
+drop_one_ROA,只剔除 ROA,STOQ,1.0
+drop_one_ROA,只剔除 ROA,ROE,1.0
+drop_one_ROA,只剔除 ROA,ROA,0.0
+drop_one_ROA,只剔除 ROA,CAPX,1.0
+drop_one_ROA,只剔除 ROA,AGRO,1.0
+drop_one_ROA,只剔除 ROA,TOPSI,1.0
+drop_one_ROA,只剔除 ROA,SEASON,1.0
+drop_one_CAPX,只剔除 CAPX,SIZE,1.0
+drop_one_CAPX,只剔除 CAPX,MIDCAP,1.0
+drop_one_CAPX,只剔除 CAPX,BETA,1.0
+drop_one_CAPX,只剔除 CAPX,RESVOL,1.0
+drop_one_CAPX,只剔除 CAPX,HISTVOL,1.0
+drop_one_CAPX,只剔除 CAPX,MOMENTUM,1.0
+drop_one_CAPX,只剔除 CAPX,RESMOM,1.0
+drop_one_CAPX,只剔除 CAPX,BTOP,1.0
+drop_one_CAPX,只剔除 CAPX,EYIELD,1.0
+drop_one_CAPX,只剔除 CAPX,CFP,1.0
+drop_one_CAPX,只剔除 CAPX,SP,1.0
+drop_one_CAPX,只剔除 CAPX,LP,1.0
+drop_one_CAPX,只剔除 CAPX,EGRO,1.0
+drop_one_CAPX,只剔除 CAPX,SGRO,1.0
+drop_one_CAPX,只剔除 CAPX,MLEV,1.0
+drop_one_CAPX,只剔除 CAPX,BLEV,1.0
+drop_one_CAPX,只剔除 CAPX,LIQUIDITY,1.0
+drop_one_CAPX,只剔除 CAPX,STOM,1.0
+drop_one_CAPX,只剔除 CAPX,STOQ,1.0
+drop_one_CAPX,只剔除 CAPX,ROE,1.0
+drop_one_CAPX,只剔除 CAPX,ROA,1.0
+drop_one_CAPX,只剔除 CAPX,CAPX,0.0
+drop_one_CAPX,只剔除 CAPX,AGRO,1.0
+drop_one_CAPX,只剔除 CAPX,TOPSI,1.0
+drop_one_CAPX,只剔除 CAPX,SEASON,1.0
+drop_one_AGRO,只剔除 AGRO,SIZE,1.0
+drop_one_AGRO,只剔除 AGRO,MIDCAP,1.0
+drop_one_AGRO,只剔除 AGRO,BETA,1.0
+drop_one_AGRO,只剔除 AGRO,RESVOL,1.0
+drop_one_AGRO,只剔除 AGRO,HISTVOL,1.0
+drop_one_AGRO,只剔除 AGRO,MOMENTUM,1.0
+drop_one_AGRO,只剔除 AGRO,RESMOM,1.0
+drop_one_AGRO,只剔除 AGRO,BTOP,1.0
+drop_one_AGRO,只剔除 AGRO,EYIELD,1.0
+drop_one_AGRO,只剔除 AGRO,CFP,1.0
+drop_one_AGRO,只剔除 AGRO,SP,1.0
+drop_one_AGRO,只剔除 AGRO,LP,1.0
+drop_one_AGRO,只剔除 AGRO,EGRO,1.0
+drop_one_AGRO,只剔除 AGRO,SGRO,1.0
+drop_one_AGRO,只剔除 AGRO,MLEV,1.0
+drop_one_AGRO,只剔除 AGRO,BLEV,1.0
+drop_one_AGRO,只剔除 AGRO,LIQUIDITY,1.0
+drop_one_AGRO,只剔除 AGRO,STOM,1.0
+drop_one_AGRO,只剔除 AGRO,STOQ,1.0
+drop_one_AGRO,只剔除 AGRO,ROE,1.0
+drop_one_AGRO,只剔除 AGRO,ROA,1.0
+drop_one_AGRO,只剔除 AGRO,CAPX,1.0
+drop_one_AGRO,只剔除 AGRO,AGRO,0.0
+drop_one_AGRO,只剔除 AGRO,TOPSI,1.0
+drop_one_AGRO,只剔除 AGRO,SEASON,1.0
+drop_one_TOPSI,只剔除 TOPSI,SIZE,1.0
+drop_one_TOPSI,只剔除 TOPSI,MIDCAP,1.0
+drop_one_TOPSI,只剔除 TOPSI,BETA,1.0
+drop_one_TOPSI,只剔除 TOPSI,RESVOL,1.0
+drop_one_TOPSI,只剔除 TOPSI,HISTVOL,1.0
+drop_one_TOPSI,只剔除 TOPSI,MOMENTUM,1.0
+drop_one_TOPSI,只剔除 TOPSI,RESMOM,1.0
+drop_one_TOPSI,只剔除 TOPSI,BTOP,1.0
+drop_one_TOPSI,只剔除 TOPSI,EYIELD,1.0
+drop_one_TOPSI,只剔除 TOPSI,CFP,1.0
+drop_one_TOPSI,只剔除 TOPSI,SP,1.0
+drop_one_TOPSI,只剔除 TOPSI,LP,1.0
+drop_one_TOPSI,只剔除 TOPSI,EGRO,1.0
+drop_one_TOPSI,只剔除 TOPSI,SGRO,1.0
+drop_one_TOPSI,只剔除 TOPSI,MLEV,1.0
+drop_one_TOPSI,只剔除 TOPSI,BLEV,1.0
+drop_one_TOPSI,只剔除 TOPSI,LIQUIDITY,1.0
+drop_one_TOPSI,只剔除 TOPSI,STOM,1.0
+drop_one_TOPSI,只剔除 TOPSI,STOQ,1.0
+drop_one_TOPSI,只剔除 TOPSI,ROE,1.0
+drop_one_TOPSI,只剔除 TOPSI,ROA,1.0
+drop_one_TOPSI,只剔除 TOPSI,CAPX,1.0
+drop_one_TOPSI,只剔除 TOPSI,AGRO,1.0
+drop_one_TOPSI,只剔除 TOPSI,TOPSI,0.0
+drop_one_TOPSI,只剔除 TOPSI,SEASON,1.0
+drop_one_SEASON,只剔除 SEASON,SIZE,1.0
+drop_one_SEASON,只剔除 SEASON,MIDCAP,1.0
+drop_one_SEASON,只剔除 SEASON,BETA,1.0
+drop_one_SEASON,只剔除 SEASON,RESVOL,1.0
+drop_one_SEASON,只剔除 SEASON,HISTVOL,1.0
+drop_one_SEASON,只剔除 SEASON,MOMENTUM,1.0
+drop_one_SEASON,只剔除 SEASON,RESMOM,1.0
+drop_one_SEASON,只剔除 SEASON,BTOP,1.0
+drop_one_SEASON,只剔除 SEASON,EYIELD,1.0
+drop_one_SEASON,只剔除 SEASON,CFP,1.0
+drop_one_SEASON,只剔除 SEASON,SP,1.0
+drop_one_SEASON,只剔除 SEASON,LP,1.0
+drop_one_SEASON,只剔除 SEASON,EGRO,1.0
+drop_one_SEASON,只剔除 SEASON,SGRO,1.0
+drop_one_SEASON,只剔除 SEASON,MLEV,1.0
+drop_one_SEASON,只剔除 SEASON,BLEV,1.0
+drop_one_SEASON,只剔除 SEASON,LIQUIDITY,1.0
+drop_one_SEASON,只剔除 SEASON,STOM,1.0
+drop_one_SEASON,只剔除 SEASON,STOQ,1.0
+drop_one_SEASON,只剔除 SEASON,ROE,1.0
+drop_one_SEASON,只剔除 SEASON,ROA,1.0
+drop_one_SEASON,只剔除 SEASON,CAPX,1.0
+drop_one_SEASON,只剔除 SEASON,AGRO,1.0
+drop_one_SEASON,只剔除 SEASON,TOPSI,1.0
+drop_one_SEASON,只剔除 SEASON,SEASON,0.0
