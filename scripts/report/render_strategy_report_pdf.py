@@ -19,10 +19,9 @@ from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DOCS_DIR = PROJECT_ROOT / "docs"
-REPORT_MD = DOCS_DIR / "BETA_MMT_V1_CNE6风格择时策略报告.md"
-REPORT_HTML = DOCS_DIR / "BETA_MMT_V1_CNE6风格择时策略报告_图文版.html"
-REPORT_PDF = DOCS_DIR / "BETA_MMT_V1_CNE6风格择时策略报告_图文版.pdf"
-REPORT_PDF_CANONICAL = DOCS_DIR / "BETA_MMT_V1_CNE6风格择时策略报告.pdf"
+REPORT_MD = DOCS_DIR / "BETA_MMT_V1_CNE6风格择时策略报告_研究留痕版.md"
+REPORT_HTML = DOCS_DIR / "BETA_MMT_V1_CNE6风格择时策略报告_研究留痕版.html"
+REPORT_PDF = DOCS_DIR / "BETA_MMT_V1_CNE6风格择时策略报告_研究留痕版.pdf"
 
 
 FIGURES_BY_SECTION = {
@@ -521,10 +520,8 @@ def render_pdf() -> None:
             ],
             check=True,
         )
-    REPORT_PDF_CANONICAL.write_bytes(REPORT_PDF.read_bytes())
     print(f"HTML: {REPORT_HTML}")
     print(f"PDF:  {REPORT_PDF}")
-    print(f"PDF:  {REPORT_PDF_CANONICAL}")
 
 
 if __name__ == "__main__":

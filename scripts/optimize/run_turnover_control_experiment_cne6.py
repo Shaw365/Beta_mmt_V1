@@ -1,7 +1,7 @@
 """
 运行 Barra CNE6 风格择时策略的换手控制参数网格实验。
 
-实验内容对应 `docs/BETA_MMT_V1_CNE6策略优化实验记录.md` 的 1.3：
+实验内容对应 `docs/BETA_MMT_V1_CNE6风格择时策略_优化实验记录.md` 的 1.3：
 1. max_turnover = 20% / 30% / 40% / 50%
 2. turnover_buffer_multiplier = 1.5 / 2.0 / 3.0
 3. 对每个场景计算交易成本压力测试结果

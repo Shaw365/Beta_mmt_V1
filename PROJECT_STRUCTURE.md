@@ -133,7 +133,8 @@ scripts/
 
 | 脚本 | 说明 |
 |---|---|
-| `scripts/report/render_strategy_report_pdf.py` | 将 Markdown 策略报告渲染为图文版 HTML/PDF |
+| `scripts/report/render_strategy_report_sample_style.py` | 将最终主文档 Markdown 策略报告渲染为样例风格 HTML/PDF |
+| `scripts/report/render_strategy_report_pdf.py` | 将研究留痕版 Markdown 策略报告渲染为 HTML/PDF |
 
 ## 输出目录
 
