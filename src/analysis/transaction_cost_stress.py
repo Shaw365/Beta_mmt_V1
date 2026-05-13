@@ -454,7 +454,8 @@ def plot_transaction_cost_stress(detail_df, summary_df, cost_bps_to_plot=None, o
     ax_nav.grid(True, alpha=0.25)
     ax_nav.legend(loc="upper left", ncol=4)
 
-    if "capital" in summary_df.columns:
+    is_capacity_table = "capital" in summary_df.columns
+    if is_capacity_table:
         table_df = summary_df[
             [
                 "capital",
@@ -541,7 +542,7 @@ def plot_transaction_cost_stress(detail_df, summary_df, cost_bps_to_plot=None, o
         if col == col_index[scenario_col]:
             cell.set_facecolor("#F5F5F5")
             cell.set_text_props(weight="bold")
-        elif col == col_index["年化收益"]:
+        elif col == col_index["年化收益"] and not is_capacity_table:
             if raw_row["annual_return"] >= 0.25:
                 cell.set_facecolor("#E4F4E8")
             elif raw_row["annual_return"] <= 0.10:

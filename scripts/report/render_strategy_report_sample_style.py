@@ -391,9 +391,9 @@ def build_html(markdown_text: str) -> str:
     <div class="subtitle">基于 Barra 风格因子通道择时与成交约束的研究</div>
     <div class="en">A Style Timing Strategy Based on Barra CNE6 Factors, Turnover Control and Execution Constraints</div>
     <div class="meta">
-      日期&nbsp;&nbsp;<b>2026-05-12</b><br/>
+      日期&nbsp;&nbsp;<b>2026-05-13</b><br/>
       标的&nbsp;&nbsp;<b>A 股股票池 / Barra CNE6 风格因子</b><br/>
-      数据范围&nbsp;&nbsp;<b>2020-02-17 ~ 2025-12-22</b><br/>
+      数据范围&nbsp;&nbsp;<b>主样本 2020-02-17 ~ 2025-12-22；2026案例至 2026-05-06</b><br/>
       定稿版本&nbsp;&nbsp;<b>L20 / S5 / B2 / E1 / N100 + tc50_buf2</b>
     </div>
   </section>

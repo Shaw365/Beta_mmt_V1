@@ -566,8 +566,8 @@ def plot_regime_summary(regime_summary_df, attribution_df, regimes):
         regime_return = meta.get("geometric_strategy_return", 0.0)
         col_labels.append(f"{regime_name}\n{start_date} ~ {end_date}\n策略 {regime_return:.1%}")
 
-    fig = plt.figure(figsize=(14, 11), constrained_layout=True)
-    gs = fig.add_gridspec(2, 1, height_ratios=[1.0, 2.2], hspace=0.32)
+    fig = plt.figure(figsize=(14, 8.2))
+    gs = fig.add_gridspec(2, 1, height_ratios=[0.85, 2.35], hspace=0.26)
 
     # 上半部分：策略累计净值，并用色块标出归因分段，和下方热力图列形成对应
     ax_nav = fig.add_subplot(gs[0])
@@ -613,8 +613,9 @@ def plot_regime_summary(regime_summary_df, attribution_df, regimes):
         for x in range(values.shape[1]):
             ax.text(x, y, f"{values[y, x]:.1f}", ha="center", va="center", fontsize=8)
 
-    colorbar = fig.colorbar(image, ax=ax)
+    colorbar = fig.colorbar(image, ax=ax, fraction=0.035, pad=0.02)
     colorbar.set_label("算术累计贡献 (%)")
+    fig.subplots_adjust(left=0.08, right=0.95, top=0.94, bottom=0.16)
     fig.savefig(REGIME_PLOT_OUTPUT_PATH, dpi=200)
     plt.close(fig)
 
