@@ -14,7 +14,8 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from src.models.barra_cne6 import BarraCNE6, __market_engine__
+from src.models.barra_cne6 import BarraCNE6
+from src.utils.db import get_market_engine
 from src.strategies.factor_timing_strategy_v3 import FactorTimingStrategy
 from src.optimize import execution_capacity_experiment as execution_core
 
@@ -130,7 +131,7 @@ def get_latest_case_end_date():
     FROM stock_eod
     WHERE date >= '2026-01-01'
     """
-    max_date = pd.read_sql(query, __market_engine__)["max_date"].iloc[0]
+    max_date = pd.read_sql(query, get_market_engine())["max_date"].iloc[0]
     if pd.isna(max_date):
         raise RuntimeError("stock_eod has no 2026 data.")
     return pd.Timestamp(max_date).strftime("%Y-%m-%d")

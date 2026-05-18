@@ -27,7 +27,16 @@ pip install -r requirements.txt
 
 主要依赖包括 `pandas`、`numpy`、`sqlalchemy`、`pymysql`、`matplotlib`、`seaborn`、`scipy`、`statsmodels`、`openpyxl`。
 
-部分脚本会访问内网 MySQL 数据库，数据库连接目前写在 `src/models/barra_cne6.py`、`src/utils/benchmark.py` 等模块中；如果只基于已有 `output/cne6/data/` 缓存运行，则不一定需要重新访问数据库。
+部分脚本会访问 MySQL 数据库，数据库连接统一从环境变量读取，真实账号信息不应写入源码。可参考 `.env.example` 配置：
+
+```bash
+BETA_MMT_FINANCE_DATABASE_URL=mysql+pymysql://<user>:<password>@<host>:3306/stock_finance
+BETA_MMT_MARKET_DATABASE_URL=mysql+pymysql://<user>:<password>@<host>:3306/stock_market
+BETA_MMT_BASIC_DATABASE_URL=mysql+pymysql://<user>:<password>@<host>:3306/stock_basic
+BETA_MMT_INDEX_DATABASE_URL=mysql+pymysql://<user>:<password>@<host>:3306/index_market
+```
+
+如果只基于已有 `output/cne6/data/` 缓存运行，则不一定需要重新访问数据库。
 
 ## 快速入口
 

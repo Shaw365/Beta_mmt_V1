@@ -39,6 +39,7 @@ src/
 │  ├─ execution_turnover_walk_forward.py
 │  └─ turnover_control_experiment.py
 └─ utils/
+   ├─ db.py
    ├─ benchmark.py
    └─ trade_recorder.py
 ```
@@ -80,6 +81,7 @@ src/
 
 | 文件 | 作用 |
 |---|---|
+| `db.py` | 统一从环境变量读取数据库 URL 并创建 SQLAlchemy engine，避免源码泄露账号信息 |
 | `benchmark.py` | 读取指数数据，计算周频基准收益与相对收益 |
 | `trade_recorder.py` | 记录调仓、买卖和持仓变化，导出交易记录 |
 
@@ -252,7 +254,7 @@ python scripts/report/render_strategy_report_pdf.py
 - 主策略默认结果后缀为 `l20_s5_b2_e1_n100`；
 - 最终执行层采用 `tc50_buf2` 作为研究基准；
 - 主样本报告覆盖 `2020-02-17 ~ 2025-12-22`，并补充 2026 年案例分析；
-- 数据库连接仍在模型/工具模块中硬编码，后续如需提升可移植性，建议迁移到环境变量或本地配置文件；
+- 数据库连接从环境变量读取，真实 MySQL 账号信息不进入版本库；
 - 多数脚本会覆盖同名输出文件，运行前应确认当前输出是否需要保留。
 
 **最后更新：** 2026-05-13

@@ -1,5 +1,8 @@
 __pycache__/
 *.pyc
+.env
+.env.local
+.env.*.local
 
 # Oversized generated data files exceed GitHub's normal 100MB file limit.
 output/cne6/data/core_parameter_stability_execution_detail_l20_s5_b2_e1_n100.csv

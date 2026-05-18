@@ -9,7 +9,6 @@ Barra CNE5 模型实现（优化版）
 
 import pandas as pd
 import numpy as np
-import sqlalchemy
 import matplotlib
 matplotlib.use('Agg')  # 使用非交互式后端，避免Windows TkAgg错误
 import matplotlib.pyplot as plt
@@ -19,25 +18,12 @@ from datetime import datetime, timedelta
 import warnings
 import os
 warnings.filterwarnings('ignore')
+from src.utils.db import get_basic_engine, get_finance_engine, get_market_engine
 
 # 设置中文字体
 plt.rcParams['font.sans-serif'] = ['SimHei', 'Microsoft YaHei', 'Arial Unicode MS']
 plt.rcParams['axes.unicode_minus'] = False  # 解决负号显示问题
 plt.rcParams['font.family'] = 'sans-serif'
-
-# 数据库连接
-__jy_connection__ = sqlalchemy.create_engine(
-    'mysql+pymysql://deriv168_readonly:JuYuan#DH*Deriv666@rm-uf63en3kc372u7d09yo.mysql.rds.aliyuncs.com:3306/jyzx')
-
-__finance_engine__ = sqlalchemy.create_engine(
-    'mysql+pymysql://readonly:readonly@192.168.7.203:3306/stock_finance')
-
-__market_engine__ = sqlalchemy.create_engine(
-    'mysql+pymysql://readonly:readonly@192.168.7.203:3306/stock_market')
-
-__basic_engine__ = sqlalchemy.create_engine(
-    'mysql+pymysql://readonly:readonly@192.168.7.203:3306/stock_basic')
-
 
 class BarraCNE5:
     """Barra CNE5 模型"""
@@ -69,7 +55,7 @@ class BarraCNE5:
         WHERE date >= '{self.data_start_date}' AND date <= '{self.end_date}'
         AND is_st = 0
         """
-        price_df = pd.read_sql(query, __market_engine__)
+        price_df = pd.read_sql(query, get_market_engine())
         
         # 转换日期列为datetime类型
         price_df['date'] = pd.to_datetime(price_df['date'])
@@ -80,7 +66,7 @@ class BarraCNE5:
         FROM industry_chg
         WHERE sw_l1 IS NOT NULL
         """
-        industry_df = pd.read_sql(query_industry, __basic_engine__)
+        industry_df = pd.read_sql(query_industry, get_basic_engine())
         
         # 转换日期列为datetime类型
         industry_df['apply_date'] = pd.to_datetime(industry_df['apply_date'])
@@ -107,7 +93,7 @@ class BarraCNE5:
         WHERE IfMerged = 1 AND IfAdjusted = 2
         AND report_date >= '2019-01-01' AND report_date <= '{self.end_date}'
         """
-        balance_df = pd.read_sql(query_balance, __finance_engine__)
+        balance_df = pd.read_sql(query_balance, get_finance_engine())
         
         # 获取利润表数据
         query_income = f"""
@@ -117,7 +103,7 @@ class BarraCNE5:
         WHERE IfMerged = 1 AND IfAdjusted = 2
         AND report_date >= '2019-01-01' AND report_date <= '{self.end_date}'
         """
-        income_df = pd.read_sql(query_income, __finance_engine__)
+        income_df = pd.read_sql(query_income, get_finance_engine())
         
         # 获取现金流量表数据
         query_cashflow = f"""
@@ -126,7 +112,7 @@ class BarraCNE5:
         WHERE IfMerged = 1 AND IfAdjusted = 2
         AND report_date >= '2019-01-01' AND report_date <= '{self.end_date}'
         """
-        cashflow_df = pd.read_sql(query_cashflow, __finance_engine__)
+        cashflow_df = pd.read_sql(query_cashflow, get_finance_engine())
         
         # 转换日期列为datetime类型
         balance_df['report_date'] = pd.to_datetime(balance_df['report_date'])

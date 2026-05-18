@@ -9,12 +9,8 @@
 
 import pandas as pd
 import numpy as np
-import sqlalchemy
 import os
-
-# 数据库连接
-__index_engine__ = sqlalchemy.create_engine(
-    'mysql+pymysql://readonly:readonly@192.168.7.203:3306/index_market')
+from src.utils.db import get_index_engine
 
 # 指数代码
 INDEX_CODES = {
@@ -55,7 +51,7 @@ def load_index_data(start_date='2020-01-01', end_date='2025-12-31', cache_path=N
     ORDER BY date, code
     """
 
-    df = pd.read_sql(query, __index_engine__)
+    df = pd.read_sql(query, get_index_engine())
     df['date'] = pd.to_datetime(df['date'])
 
     print(f"  指数数据: {len(df)} 行, {df['code'].unique()} 代码")
