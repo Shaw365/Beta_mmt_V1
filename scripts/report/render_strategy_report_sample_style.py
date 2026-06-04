@@ -19,9 +19,9 @@ from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DOCS_DIR = PROJECT_ROOT / "docs"
-REPORT_MD = DOCS_DIR / "BETA_MMT_V1_CNE6风格择时策略报告_最终主文档.md"
-REPORT_HTML = DOCS_DIR / "BETA_MMT_V1_CNE6风格择时策略报告_最终主文档.html"
-REPORT_PDF = DOCS_DIR / "BETA_MMT_V1_CNE6风格择时策略报告_最终主文档.pdf"
+REPORT_MD = DOCS_DIR / "CNE6风格择时与年度Alpha精选策略研究报告_最终主文档.md"
+REPORT_HTML = DOCS_DIR / "CNE6风格择时与年度Alpha精选策略研究报告_最终主文档.html"
+REPORT_PDF = DOCS_DIR / "CNE6风格择时与年度Alpha精选策略研究报告_最终主文档.pdf"
 
 
 def inline_markdown(text: str) -> str:
@@ -102,6 +102,8 @@ def markdown_to_html(markdown_text: str) -> tuple[str, list[tuple[int, str, str]
     paragraph: list[str] = []
     code_lines: list[str] = []
     in_code = False
+    current_section = ""
+    core_parameter_note_inserted = False
     i = 0
 
     def flush_paragraph() -> None:
@@ -137,6 +139,10 @@ def markdown_to_html(markdown_text: str) -> tuple[str, list[tuple[int, str, str]
             i += 1
             continue
 
+        if stripped.startswith("<!--") and stripped.endswith("-->"):
+            i += 1
+            continue
+
         image_match = re.match(r"^!\[(.*?)\]\((.*?)\)$", stripped)
         if image_match:
             flush_paragraph()
@@ -157,6 +163,14 @@ def markdown_to_html(markdown_text: str) -> tuple[str, list[tuple[int, str, str]
                 table_lines.append(lines[i])
                 i += 1
             body_parts.append(render_table(table_lines))
+            if current_section.startswith("7.1 ") and not core_parameter_note_inserted:
+                body_parts.append(
+                    '<div class="local-page-footer">'
+                    "注：平均现金指加入成交约束后，每期未能成功买入目标股票而留在现金中的资金权重均值；"
+                    "它不是策略主动配置现金，而是 ADV 上限、涨跌停近似限制和成交不足带来的执行结果。"
+                    "</div>"
+                )
+                core_parameter_note_inserted = True
             continue
 
         heading_match = re.match(r"^(#{1,4})\s+(.+)$", stripped)
@@ -164,6 +178,8 @@ def markdown_to_html(markdown_text: str) -> tuple[str, list[tuple[int, str, str]
             flush_paragraph()
             level = len(heading_match.group(1))
             title = heading_match.group(2).strip()
+            if level == 3:
+                current_section = title
             slug = re.sub(r"[^0-9A-Za-z\u4e00-\u9fff]+", "-", title).strip("-")
             if level in {2, 3}:
                 toc_items.append((level, title, slug))
@@ -215,7 +231,7 @@ def build_html(markdown_text: str) -> str:
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8" />
-  <title>BETA_MMT_V1 CNE6 风格择时策略报告</title>
+  <title>CNE6风格择时与年度Alpha精选策略研究报告</title>
   <style>
     @page {{
       size: A4;
@@ -268,6 +284,16 @@ def build_html(markdown_text: str) -> str:
     .cover .meta b {{ color: #202636; }}
     .page-footer {{
       display: none;
+    }}
+    .local-page-footer {{
+      margin: -4px 0 12px 0;
+      padding-top: 4px;
+      border-top: 1px solid #d8dee8;
+      color: #6b7280;
+      font-size: 8.5px;
+      line-height: 1.45;
+      text-align: right;
+      break-inside: avoid;
     }}
     .toc-page {{
       min-height: 220mm;
@@ -385,16 +411,15 @@ def build_html(markdown_text: str) -> str:
   </style>
 </head>
 <body>
-  <div class="page-footer">BETA_MMT_V1 CNE6 风格择时策略报告</div>
   <section class="cover">
-    <h1>BETA_MMT_V1 CNE6 风格择时策略：</h1>
-    <div class="subtitle">基于 Barra 风格因子通道择时与成交约束的研究</div>
-    <div class="en">A Style Timing Strategy Based on Barra CNE6 Factors, Turnover Control and Execution Constraints</div>
+    <h1>CNE6风格择时与年度Alpha精选策略研究报告</h1>
+    <div class="subtitle">基于 Barra CNE6 风格因子、交易成本与成交约束的实证评估</div>
+    <div class="en">Empirical Evaluation Based on Barra CNE6 Factors, Transaction Costs and Execution Constraints</div>
     <div class="meta">
-      日期&nbsp;&nbsp;<b>2026-05-13</b><br/>
+      日期&nbsp;&nbsp;<b>2026-06-05</b><br/>
       标的&nbsp;&nbsp;<b>A 股股票池 / Barra CNE6 风格因子</b><br/>
-      数据范围&nbsp;&nbsp;<b>主样本 2020-02-17 ~ 2025-12-22；2026案例至 2026-05-06</b><br/>
-      定稿版本&nbsp;&nbsp;<b>L20 / S5 / B2 / E1 / N100 + tc50_buf2</b>
+      数据范围&nbsp;&nbsp;<b>主样本 2020-02-17 ~ 2025-12-22</b><br/>
+      定稿版本&nbsp;&nbsp;<b>L20 / S5 / B2 / E1 / Barra Top500 -> Alpha Top50 / baseline</b>
     </div>
   </section>
   {toc}

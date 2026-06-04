@@ -240,7 +240,7 @@ class FactorTimingStrategy:
         return weekly_returns_df
     
     def select_stocks(self, factor_exposure_df, optimal_vector, signal_date, trade_date,
-                      suspended_codes=None, candidate_pool_size=None):
+                      suspended_codes=None, candidate_pool_size=None, allowed_codes=None):
         """
         选择股票（使用信号日的因子暴露，交易日前一天的数据）
         
@@ -251,12 +251,14 @@ class FactorTimingStrategy:
             trade_date: 交易日期（用于日志）
             suspended_codes: 停牌股票代码集合（不参与选股）
             candidate_pool_size: 候选池大小。为空时直接返回top_n；启用换手控制时可扩大候选池
+            allowed_codes: 前置候选池股票代码集合。提供时只在该集合内执行Barra相似度选股
             
         返回:
             选中的股票代码列表
         """
         if suspended_codes is None:
             suspended_codes = set()
+        allowed_codes = set(allowed_codes) if allowed_codes is not None else None
         # 确保日期格式一致
         factor_exposure_df = factor_exposure_df.copy()
         factor_exposure_df['date'] = pd.to_datetime(factor_exposure_df['date'])
@@ -272,6 +274,12 @@ class FactorTimingStrategy:
                 return []
             current_data = current_data.sort_values('date')
             current_data = current_data.groupby('code').last().reset_index()
+
+        if allowed_codes is not None:
+            current_data = current_data[current_data['code'].isin(allowed_codes)].copy()
+            if len(current_data) == 0:
+                print(f"警告: {signal_date} 前置候选池与Barra暴露数据无交集")
+                return []
         
         # 计算每只股票与最优向量的余弦相似度
         similarities = []
@@ -387,7 +395,8 @@ class FactorTimingStrategy:
         return turnover
     
     def run_weekly_rebalance(self, factor_exposure_df, cumulative_returns_df, price_df,
-                              active_screener=None, active_top_n=100):
+                              active_screener=None, active_top_n=100,
+                              candidate_pool_provider=None, candidate_pool_size=500):
         """
         执行周度换仓策略
         
@@ -397,6 +406,8 @@ class FactorTimingStrategy:
             price_df: 价格数据
             active_screener: 主动因子筛选器（可选），如果提供则从候选池中二次精选
             active_top_n: 主动因子筛选后保留的股票数量（默认100）
+            candidate_pool_provider: 前置候选池生成器（可选），需提供build_for_dates和get_pool
+            candidate_pool_size: 前置候选池目标股票数量，用于日志说明
             
         返回:
             策略收益DataFrame
@@ -404,6 +415,8 @@ class FactorTimingStrategy:
         print("\n开始执行周度换仓策略...")
         if active_screener is not None:
             print(f"  启用主动因子筛选: Barra选{self.top_n}只 → 主动因子精选{active_top_n}只")
+        if candidate_pool_provider is not None:
+            print(f"  启用年度因子前置候选池: 每周先筛选约{candidate_pool_size}只，再执行Barra择时选股")
         
         # 计算择时信号（基于累计收益率）
         pst_df = self.calc_pst(cumulative_returns_df)
@@ -428,6 +441,16 @@ class FactorTimingStrategy:
                     weekly_dates.append(current_date)
         
         print(f"总换仓次数: {len(weekly_dates)}")
+
+        signal_dates = []
+        for i in range(len(weekly_dates) - 1):
+            current_date = weekly_dates[i]
+            current_idx = all_dates.index(current_date)
+            signal_dates.append(current_date if current_idx == 0 else all_dates[current_idx - 1])
+
+        if candidate_pool_provider is not None:
+            print("构建年度因子前置候选池...")
+            candidate_pool_provider.build_for_dates(signal_dates)
         
         # 预计算所有股票的周度收益率（性能优化）
         weekly_returns_df = self.precompute_weekly_returns(price_df, weekly_dates)
@@ -466,13 +489,21 @@ class FactorTimingStrategy:
             
             # 获取当日停牌股票集合
             suspended_codes = suspend_lookup.get(current_date, set())
+
+            allowed_codes = None
+            if candidate_pool_provider is not None:
+                allowed_codes = candidate_pool_provider.get_pool(signal_date)
+                if len(allowed_codes) == 0:
+                    print(f"警告: {signal_date} 无年度因子候选池，跳过本次换仓")
+                    continue
             
             # 第一步：Barra择时选股（使用信号日期的因子暴露，排除停牌股票）
             # 启用换手控制时，先取更宽的候选池，随后在候选池内优先保留旧持仓。
             candidate_pool_size = self.get_turnover_candidate_pool_size()
             selected_codes = self.select_stocks(factor_exposure_df, optimal_vector, signal_date, current_date, 
                                                 suspended_codes=suspended_codes,
-                                                candidate_pool_size=candidate_pool_size)
+                                                candidate_pool_size=candidate_pool_size,
+                                                allowed_codes=allowed_codes)
             
             if len(selected_codes) == 0:
                 continue
@@ -530,6 +561,7 @@ class FactorTimingStrategy:
                 'return': port_return,
                 'num_stocks': len(selected_codes),
                 'turnover': turnover,
+                'pre_candidate_pool_size': len(allowed_codes) if allowed_codes is not None else np.nan,
                 'selected_codes': selected_codes
             })
             
@@ -542,11 +574,12 @@ class FactorTimingStrategy:
         
         # 统计持仓数量
         if len(portfolio_returns_df) > 0:
+            target_display_n = active_top_n if active_screener is not None else self.top_n
             print(f"\n持仓数量统计:")
             print(f"  平均持仓: {portfolio_returns_df['num_stocks'].mean():.1f}")
             print(f"  最小持仓: {portfolio_returns_df['num_stocks'].min()}")
             print(f"  最大持仓: {portfolio_returns_df['num_stocks'].max()}")
-            print(f"  持仓不足100的次数: {(portfolio_returns_df['num_stocks'] < 100).sum()}")
+            print(f"  持仓不足{target_display_n}的次数: {(portfolio_returns_df['num_stocks'] < target_display_n).sum()}")
             
             print(f"\n换手率统计:")
             print(f"  平均换手率: {portfolio_returns_df['turnover'].mean()*100:.2f}%")
@@ -589,7 +622,7 @@ class FactorTimingStrategy:
     def plot_strategy_performance(self, portfolio_returns_df, output_dir, stats=None,
                                   annual_returns=None, monthly_win_rate=None,
                                   file_suffix=None, strategy_title=None,
-                                  benchmark_data=None):
+                                  benchmark_data=None, target_holding_n=None):
         """
         绘制策略表现（含统计指标叠加、基准对比、超额收益和回撤）
         
@@ -602,6 +635,7 @@ class FactorTimingStrategy:
             file_suffix: 自定义文件名后缀
             strategy_title: 自定义策略标题
             benchmark_data: 基准数据 DataFrame (index=date, columns=[csi500_nav, csi1000_nav, excess_csi500, excess_csi1000])
+            target_holding_n: 图中展示的目标持仓数量。为空时使用self.top_n
         """
         print("\n绘制策略表现...")
         
@@ -751,7 +785,8 @@ class FactorTimingStrategy:
         ax_h = fig.add_subplot(gs[ax_idx]); ax_idx += 1
         ax_h.plot(df['date'], df['num_stocks'], 
                 linewidth=2, color='#FF9800', marker='o', markersize=3)
-        ax_h.axhline(y=self.top_n, color='red', linestyle='--', alpha=0.5, label=f'目标数量: {self.top_n}')
+        target_holding_n = self.top_n if target_holding_n is None else target_holding_n
+        ax_h.axhline(y=target_holding_n, color='red', linestyle='--', alpha=0.5, label=f'目标数量: {target_holding_n}')
         ax_h.set_title('持仓股票数量', fontsize=13, fontweight='bold')
         ax_h.set_ylabel('股票数量', fontsize=11)
         ax_h.legend(loc='best', fontsize=10)

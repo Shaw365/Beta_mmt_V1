@@ -1,0 +1,7 @@
+﻿barra_pool_size,alpha_top_n,suffix,cumulative_return_pct,annual_return_pct,annual_vol_pct,sharpe,max_drawdown_pct,win_rate_pct,profit_loss_ratio,trade_count,avg_holding_count,avg_turnover_pct,portfolio_csv
+250,50,l20_s5_b2_e1_n250_alpha50,696.43,42.62,30.31,1.31,-26.89,59.8,1.15,301,47.7,76.95,E:\code\beta_mmt_v1\output\cne6\data\portfolio_returns_l20_s5_b2_e1_n250_alpha50.csv
+250,100,l20_s5_b2_e1_n250_alpha100,407.89,32.05,28.97,1.0,-25.05,57.48,1.16,301,83.2,73.26,E:\code\beta_mmt_v1\output\cne6\data\portfolio_returns_l20_s5_b2_e1_n250_alpha100.csv
+500,50,l20_s5_b2_e1_n500_alpha50,1102.64,53.03,30.5,1.64,-26.31,60.13,1.25,301,50.0,71.43,E:\code\beta_mmt_v1\output\cne6\data\portfolio_returns_l20_s5_b2_e1_n500_alpha50.csv
+500,100,l20_s5_b2_e1_n500_alpha100,650.61,41.18,29.65,1.29,-26.37,57.81,1.24,301,98.5,68.78,E:\code\beta_mmt_v1\output\cne6\data\portfolio_returns_l20_s5_b2_e1_n500_alpha100.csv
+1000,50,l20_s5_b2_e1_n1000_alpha50,902.23,48.33,30.73,1.48,-34.61,59.47,1.23,301,50.0,62.27,E:\code\beta_mmt_v1\output\cne6\data\portfolio_returns_l20_s5_b2_e1_n1000_alpha50.csv
+1000,100,l20_s5_b2_e1_n1000_alpha100,761.6,44.55,29.9,1.39,-29.7,59.47,1.2,301,100.0,60.21,E:\code\beta_mmt_v1\output\cne6\data\portfolio_returns_l20_s5_b2_e1_n1000_alpha100.csv

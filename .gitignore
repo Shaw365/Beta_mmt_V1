@@ -9,6 +9,7 @@ output/cne6/data/core_parameter_stability_execution_detail_l20_s5_b2_e1_n100.csv
 output/cne6/data/core_parameter_stability_targets_l20_s5_b2_e1_n100.csv
 output/cne6/data/execution_turnover_revaluation_detail_l20_s5_b2_e1_n100.csv
 output/cne6/data/execution_capacity_trade_detail_l20_s5_b2_e1_n100.csv
+output/cne6/data/execution_capacity_trade_detail_l20_s5_b2_e1_n500_alpha50.csv
 output/cne6/data/factor_exposure_cne6.csv
 output/cne6/data/factor_weight_experiment_returns_l20_s5_b2_e1_n100.csv
 output/cne6/data/price_data_cne6.csv
