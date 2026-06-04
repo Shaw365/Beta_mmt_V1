@@ -425,8 +425,8 @@ def plot_residual_attribution(period_df, component_summary_df, bucket_summary_df
     plt.rcParams["font.sans-serif"] = ["SimHei", "Microsoft YaHei", "Arial Unicode MS", "DejaVu Sans"]
     plt.rcParams["axes.unicode_minus"] = False
 
-    fig = plt.figure(figsize=(16, 13), constrained_layout=True)
-    gs = fig.add_gridspec(3, 1, height_ratios=[1.3, 1.0, 1.6])
+    fig = plt.figure(figsize=(16, 10), constrained_layout=False)
+    gs = fig.add_gridspec(3, 1, height_ratios=[1.45, 0.78, 1.35], hspace=0.34)
 
     ax_line = fig.add_subplot(gs[0])
     line_cols = [
@@ -445,18 +445,52 @@ def plot_residual_attribution(period_df, component_summary_df, bucket_summary_df
     ax_line.grid(True, alpha=0.25)
     ax_line.legend(loc="upper left", ncol=3, fontsize=9)
 
-    ax_bar = fig.add_subplot(gs[1])
-    bar_df = component_summary_df[
+    ax_table = fig.add_subplot(gs[1])
+    table_df = component_summary_df[
         component_summary_df["component"].isin(
             ["STYLE_TOTAL", "UNIVERSE_COMMON", "SELECTION_AFTER_UNIVERSE", "RESIDUAL_TOTAL"]
         )
     ].copy()
-    colors = bar_df["total_contribution"].map(lambda value: "#2E8B57" if value >= 0 else "#C44E52")
-    ax_bar.barh(bar_df["component"], bar_df["total_contribution"] * 100.0, color=colors)
-    ax_bar.axvline(0, color="black", linewidth=0.8)
-    ax_bar.set_title("Residual 主拆解")
-    ax_bar.set_xlabel("算术累计贡献 (%)")
-    ax_bar.grid(axis="x", alpha=0.25)
+    component_labels = {
+        "STYLE_TOTAL": "风格因子解释部分",
+        "RESIDUAL_TOTAL": "Residual 合计",
+        "UNIVERSE_COMMON": "全市场等权共同项",
+        "SELECTION_AFTER_UNIVERSE": "Residual 扣全市场后的选股残差",
+    }
+    table_order = ["STYLE_TOTAL", "RESIDUAL_TOTAL", "UNIVERSE_COMMON", "SELECTION_AFTER_UNIVERSE"]
+    table_df["sort_key"] = table_df["component"].map({component: idx for idx, component in enumerate(table_order)})
+    table_df = table_df.sort_values("sort_key")
+    table_values = [
+        [
+            component_labels.get(row.component, row.component),
+            _format_percent(row.total_contribution),
+            _format_percent(row.pct_of_strategy_arithmetic),
+            _format_percent(row.positive_rate),
+        ]
+        for row in table_df.itertuples(index=False)
+    ]
+    ax_table.axis("off")
+    ax_table.set_title("Residual 主组件汇总（与上方累计曲线同口径）", pad=8)
+    table = ax_table.table(
+        cellText=table_values,
+        colLabels=["组件", "累计贡献", "策略算术收益占比", "正贡献期占比"],
+        cellLoc="center",
+        colLoc="center",
+        colWidths=[0.36, 0.18, 0.24, 0.20],
+        bbox=[0.02, 0.02, 0.96, 0.80],
+    )
+    table.auto_set_font_size(False)
+    table.set_fontsize(9.5)
+    for (row, col), cell in table.get_celld().items():
+        cell.set_edgecolor("#D8DEE8")
+        cell.set_linewidth(0.8)
+        if row == 0:
+            cell.set_facecolor("#DCE9F6")
+            cell.set_text_props(weight="bold", color="#064F9E")
+        else:
+            cell.set_facecolor("#F7F9FC" if row % 2 == 0 else "#FFFFFF")
+            if col == 0:
+                cell.set_text_props(ha="left")
 
     ax_heat = fig.add_subplot(gs[2])
     if not bucket_summary_df.empty:
@@ -482,6 +516,7 @@ def plot_residual_attribution(period_df, component_summary_df, bucket_summary_df
     else:
         ax_heat.axis("off")
 
+    fig.subplots_adjust(left=0.07, right=0.98, top=0.95, bottom=0.06)
     fig.savefig(RESIDUAL_ATTRIBUTION_PLOT_OUTPUT_PATH, dpi=200, bbox_inches="tight")
     plt.close(fig)
 

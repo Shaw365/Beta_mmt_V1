@@ -149,8 +149,9 @@ def markdown_to_html(markdown_text: str) -> tuple[str, list[tuple[int, str, str]
             caption = image_match.group(1).strip()
             data_uri = image_to_data_uri(image_match.group(2).strip())
             if data_uri:
+                figure_class = ' class="figure-compact"' if caption.startswith("图 4.") else ""
                 body_parts.append(
-                    f'<figure><img src="{data_uri}" alt="{html.escape(caption)}" />'
+                    f"<figure{figure_class}><img src=\"{data_uri}\" alt=\"{html.escape(caption)}\" />"
                     f"<figcaption>{html.escape(caption)}</figcaption></figure>"
                 )
             i += 1
@@ -391,6 +392,10 @@ def build_html(markdown_text: str) -> str:
       max-width: 100%;
       max-height: 155mm;
       object-fit: contain;
+    }}
+    figure.figure-compact img {{
+      width: 92%;
+      max-height: 130mm;
     }}
     figcaption {{
       margin-top: 5px;
